@@ -1,10 +1,14 @@
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/273057/82735535-1f269c00-9d2b-11ea-827d-5ee252f21ba9.png" alt="duppy icon" title="duppy" height=130>
+  <img src="https://user-images.githubusercontent.com/273057/82735535-1f269c00-9d2b-11ea-827d-5ee252f21ba9.png" alt="duppy icon" title="duppy" height="130"/>
 </p>
 
 #  Duppy
 
-[https://img.shields.io/badge/PRs-welcome-green] [https://img.shields.io/github/license/ZonD80/duppy] [https://img.shields.io/github/issues/ZonD80/duppy]
+<p align="center">
+  <img src="https://img.shields.io/badge/PRs-welcome-green"/>
+  <img src="https://img.shields.io/github/license/ZonD80/duppy"/>
+  <img src="https://img.shields.io/github/issues/ZonD80/duppy"/>
+</p>
 
 This app is designed to "clone" iOS apps.
 It works like this:
