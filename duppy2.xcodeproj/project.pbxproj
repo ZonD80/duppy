@@ -14,11 +14,12 @@
 		88D4A5BE24793F7900469190 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 88D4A5BC24793F7900469190 /* LaunchScreen.storyboard */; };
 		88D4A5CE247940AF00469190 /* PlistConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88D4A5CD247940AF00469190 /* PlistConverter.swift */; };
 		88D4A5D024794C7A00469190 /* appClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88D4A5CF24794C7A00469190 /* appClass.swift */; };
-		88D4A5D22479694C00469190 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 88D4A5D12479694C00469190 /* icon.png */; };
 		88D4A5D8247972EE00469190 /* Swifter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88D4A5C62479409500469190 /* Swifter.framework */; };
 		88D4A5D9247972EE00469190 /* Swifter.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 88D4A5C62479409500469190 /* Swifter.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		88D4A5DB2479733100469190 /* Zip.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88D4A5C72479409500469190 /* Zip.framework */; };
 		88D4A5DC2479733100469190 /* Zip.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 88D4A5C72479409500469190 /* Zip.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		88D4A5DE247983E500469190 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 88D4A5DD247983E500469190 /* LICENSE */; };
+		88D4A5E0247985C200469190 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 88D4A5DF247985C200469190 /* icon.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -48,8 +49,9 @@
 		88D4A5C72479409500469190 /* Zip.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Zip.framework; path = Carthage/Build/iOS/Zip.framework; sourceTree = "<group>"; };
 		88D4A5CD247940AF00469190 /* PlistConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlistConverter.swift; sourceTree = "<group>"; };
 		88D4A5CF24794C7A00469190 /* appClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = appClass.swift; sourceTree = "<group>"; };
-		88D4A5D12479694C00469190 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon.png; path = ../../../../Downloads/icon.png; sourceTree = "<group>"; };
 		88D4A5D52479723800469190 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		88D4A5DD247983E500469190 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		88D4A5DF247985C200469190 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,8 +70,9 @@
 		88D4A5A524793F7700469190 = {
 			isa = PBXGroup;
 			children = (
+				88D4A5DD247983E500469190 /* LICENSE */,
 				88D4A5D52479723800469190 /* README.md */,
-				88D4A5D12479694C00469190 /* icon.png */,
+				88D4A5DF247985C200469190 /* icon.png */,
 				88D4A5B024793F7700469190 /* duppy2 */,
 				88D4A5AF24793F7700469190 /* Products */,
 				88D4A5C52479409500469190 /* Frameworks */,
@@ -167,10 +170,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				88D4A5D22479694C00469190 /* icon.png in Resources */,
 				88D4A5BE24793F7900469190 /* LaunchScreen.storyboard in Resources */,
+				88D4A5E0247985C200469190 /* icon.png in Resources */,
 				88D4A5BB24793F7900469190 /* Assets.xcassets in Resources */,
 				88D4A5B924793F7700469190 /* Main.storyboard in Resources */,
+				88D4A5DE247983E500469190 /* LICENSE in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
