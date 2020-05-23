@@ -47,4 +47,4 @@ I personally feel fine with existing features, but this is what you can improve 
 * Make webserver that is used for itms-services run when app is minimised
 * Make interface more fancy
 * Allow to update duplicated app by matching it bundle ID with "duppy" and copying from original app over duplicated app
-* Make free space checks (at least 2x space of size original uncompressed app foulder should be available)
+* Make free space checks (at least 2x space of size original uncompressed app folder should be available)
