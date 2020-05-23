@@ -1,0 +1,27 @@
+{
+  "Mac" : [
+    {
+      "name" : "Swifter",
+      "hash" : "70d1c3c9c98ffef64faa6dff63bbc273a80d5bb00f7928eda02d416293ebadab",
+      "swiftToolchainVersion" : "5.2.4 (swiftlang-1103.0.32.9 clang-1103.0.32.53)"
+    }
+  ],
+  "watchOS" : [
+
+  ],
+  "tvOS" : [
+    {
+      "name" : "Swifter",
+      "hash" : "dca9af9304587d011a11bf56e1f4f2d231b33ca7aff59ff5bf1321d4ddd7f03c",
+      "swiftToolchainVersion" : "5.2.4 (swiftlang-1103.0.32.9 clang-1103.0.32.53)"
+    }
+  ],
+  "commitish" : "1.4.7",
+  "iOS" : [
+    {
+      "name" : "Swifter",
+      "hash" : "3d776d62024223c15d94231e7c674d544d412019b122c28e4e3eccaf826a8bf1",
+      "swiftToolchainVersion" : "5.2.4 (swiftlang-1103.0.32.9 clang-1103.0.32.53)"
+    }
+  ]
+}

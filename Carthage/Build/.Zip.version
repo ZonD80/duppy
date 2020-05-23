@@ -1,0 +1,27 @@
+{
+  "Mac" : [
+    {
+      "name" : "Zip",
+      "hash" : "82480864baaa0228f1a4d65c97a0e2602a7c4983a403f8392fa2804b982c417e",
+      "swiftToolchainVersion" : "5.2.4 (swiftlang-1103.0.32.9 clang-1103.0.32.53)"
+    }
+  ],
+  "watchOS" : [
+
+  ],
+  "tvOS" : [
+    {
+      "name" : "Zip",
+      "hash" : "04cfca65f648394cfb70261f19ed6145d0c263a511d6417d8dbf23c35c599e57",
+      "swiftToolchainVersion" : "5.2.4 (swiftlang-1103.0.32.9 clang-1103.0.32.53)"
+    }
+  ],
+  "commitish" : "1.1.0",
+  "iOS" : [
+    {
+      "name" : "Zip",
+      "hash" : "b41edff2ad4551fe5c923f400a743c05f246b9338512e7202dbb1aae770893a7",
+      "swiftToolchainVersion" : "5.2.4 (swiftlang-1103.0.32.9 clang-1103.0.32.53)"
+    }
+  ]
+}
