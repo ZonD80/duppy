@@ -20,6 +20,7 @@
 		88D4A5DC2479733100469190 /* Zip.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 88D4A5C72479409500469190 /* Zip.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		88D4A5DE247983E500469190 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 88D4A5DD247983E500469190 /* LICENSE */; };
 		88D4A5E0247985C200469190 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 88D4A5DF247985C200469190 /* icon.png */; };
+		88D4A5E22479952D00469190 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 88D4A5E12479952D00469190 /* .gitignore */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -52,6 +53,7 @@
 		88D4A5D52479723800469190 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		88D4A5DD247983E500469190 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		88D4A5DF247985C200469190 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
+		88D4A5E12479952D00469190 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,6 +72,7 @@
 		88D4A5A524793F7700469190 = {
 			isa = PBXGroup;
 			children = (
+				88D4A5E12479952D00469190 /* .gitignore */,
 				88D4A5DD247983E500469190 /* LICENSE */,
 				88D4A5D52479723800469190 /* README.md */,
 				88D4A5DF247985C200469190 /* icon.png */,
@@ -174,6 +177,7 @@
 				88D4A5E0247985C200469190 /* icon.png in Resources */,
 				88D4A5BB24793F7900469190 /* Assets.xcassets in Resources */,
 				88D4A5B924793F7700469190 /* Main.storyboard in Resources */,
+				88D4A5E22479952D00469190 /* .gitignore in Resources */,
 				88D4A5DE247983E500469190 /* LICENSE in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -346,6 +350,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = zond80.duppy2;
 				PRODUCT_NAME = Duppy;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -372,6 +377,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = zond80.duppy2;
 				PRODUCT_NAME = Duppy;
 				PROVISIONING_PROFILE_SPECIFIER = "";

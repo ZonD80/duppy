@@ -161,6 +161,16 @@ class ViewController: UIViewController , UITableViewDataSource , UITableViewDele
                 }) //Zip
                 
                 print ("zipped!");
+                
+                // removing temp dir, app is already zipped
+                do {
+                    try FileManager.default.removeItem(atPath: localPath+"/work_dir/Payload")
+                } catch {
+                    print("unable to remove temp dir \(error) we can give up on it");
+                    //self.isAppCloningNow = false;
+                    //self.setStatusText(text: "ERROR: unable to remove temp dir")
+                    //return;
+                }
 
                 
                 self.setStatusText(text: "Requesting installation");

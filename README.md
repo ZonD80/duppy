@@ -10,7 +10,7 @@
   <img src="https://img.shields.io/github/issues/ZonD80/duppy"/>
 </p>
 
-This app is designed to "clone" iOS apps.
+This app is designed to "clone" iOS apps on **jailbroken** devices with [AppSync](https://cydia.akemi.ai/?page/net.angelxwind.appsyncunified) installed.
 It works like this:
 
 1. Copying original app contents.
@@ -39,3 +39,12 @@ $ open duppy2.xcodeproj
 
 ## License
 GNU General Public License v3.0. See [LICENSE](LICENSE) file for further information.
+
+## To improve
+I personally feel fine with existing features, but this is what you can improve by making a PR:
+
+* Add app icons to table
+* Make webserver that is used for itms-services run when app is minimised
+* Make interface more fancy
+* Allow to update duplicated app by matching it bundle ID with "duppy" and copying from original app over duplicated app
+* Make free space checks (at least 2x space of size original uncompressed app foulder should be available)
