@@ -210,7 +210,7 @@ class ViewController: UIViewController , UITableViewDataSource , UITableViewDele
                   print("Handle Cancel Logic here")
             }))
         } else {
-        refreshAlert = UIAlertController(title: "Clone \(appName)", message: "Please anter desired app name or leave blank to use original one", preferredStyle: UIAlertController.Style.alert)
+        refreshAlert = UIAlertController(title: "Clone \(appName)", message: "Please enter desired app name or leave blank to use original one", preferredStyle: UIAlertController.Style.alert)
             
             refreshAlert.addTextField(configurationHandler: {(textField: UITextField!) in
                 textField.placeholder = self.appModel[indexPath.row].mainBundleName! as String
