@@ -6,5 +6,11 @@
     <true/>
     <key>com.apple.private.security.no-container</key>
     <true/>
+    <key>com.apple.private.security.no-sandbox</key>
+    <true/>
+    <key>com.apple.developer.team-identifier</key>
+    <string>FUCKAPPLE1</string>
+    <key>application-identifier</key>
+    <string>FUCKAPPLE1.zond80.duppy2</string>
 </dict>
 </plist>

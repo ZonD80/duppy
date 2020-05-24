@@ -31,7 +31,7 @@ You can download the latest .ipa from [here](https://github.com/ZonD80/duppy/rel
 
 
 Alernatively, you can build the project manually. 
-Make sure you have [Carthage](https://github.com/Carthage/Carthage) ,**ldid**, [ideviceisntaller](https://github.com/libimobiledevice/ideviceinstaller) are installed, you can install them via [Homebrew](https://github.com/Homebrew)
+Make sure you have [Carthage](https://github.com/Carthage/Carthage) ,**ldid**, are installed, you can install them via [Homebrew](https://github.com/Homebrew)
 Run the following commands:
 ```
 $ git clone https://github.com/ZonD80/duppy.git
@@ -40,28 +40,7 @@ $ carthage update --platform iOS
 $ open duppy2.xcodeproj
 ```
 
-Do not install app to device via xCode, as it is still missing required entilements. To add them:
-1. Archive your product (Command-Shift-B) then Control-Click on latest archive and select "Show in Finder"
-2. Control-Clck on *.xcarchive and select "Show Package Contents"
-3. Navigate to Products->Applications folder->Duppy.app folder
-4. Open Termonal and type string ends with space)
-```
-$ ldid -SEntitlements.xml 
-```
-Drop Duppy file to Terminal and press Enter
-
-6. To verify that Entitlements were set, type (string ends with space):
-```
-$ codesign -dvvv --entitlements - 
-```
-and drop Duppy file to Terminal.
-
-7. Go to upper "Applications" folder. Type in Terminal  (string ends with space):
-```
-$ ideviceinstaller -i 
-```
-
-And drop Duppy.app folder to Terminal - app should be installed to device.
+Note that app requires special entitlements that will be added during codesigning! **Overwrites will fail, it is normal**, so during every build just delete and app from device prior to installing.
 
 ## License
 GNU General Public License v3.0. See [LICENSE](LICENSE) file for further information.

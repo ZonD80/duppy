@@ -41,6 +41,7 @@
 
 /* Begin PBXFileReference section */
 		88254A33247A66EE001CB040 /* Entitlements.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Entitlements.xml; sourceTree = "<group>"; };
+		888DF239247AAB5D00C73898 /* nstask-bridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "nstask-bridge.h"; sourceTree = "<group>"; };
 		88D4A5AE24793F7700469190 /* Duppy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Duppy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		88D4A5B124793F7700469190 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		88D4A5B524793F7700469190 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -104,6 +105,7 @@
 				88D4A5BF24793F7900469190 /* Info.plist */,
 				88D4A5CD247940AF00469190 /* PlistConverter.swift */,
 				88D4A5CF24794C7A00469190 /* appClass.swift */,
+				888DF239247AAB5D00C73898 /* nstask-bridge.h */,
 			);
 			path = duppy2;
 			sourceTree = "<group>";
@@ -128,6 +130,7 @@
 				88D4A5AB24793F7700469190 /* Frameworks */,
 				88D4A5AC24793F7700469190 /* Resources */,
 				88D4A5DA247972EE00469190 /* Embed Frameworks */,
+				888DF23A247AAFB800C73898 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -187,6 +190,26 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		888DF23A247AAFB800C73898 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 12;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\necho \"setting entitlements to binary=====================================================================================================================\"\nldid -S\"${BUILT_PRODUCTS_DIR}/${WRAPPER_NAME}/Entitlements.xml\" \"${BUILT_PRODUCTS_DIR}/${WRAPPER_NAME}/${EXECUTABLE_NAME}\"\n\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		88D4A5AA24793F7700469190 /* Sources */ = {
@@ -354,10 +377,12 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.3;
+				MARKETING_VERSION = 1.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = zond80.duppy2;
 				PRODUCT_NAME = Duppy;
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "duppy2/nstask-bridge.h";
+				"SWIFT_OBJC_BRIDGING_HEADER[arch=*]" = "duppy2/nstask-bridge.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -381,10 +406,11 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.3;
+				MARKETING_VERSION = 1.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = zond80.duppy2;
 				PRODUCT_NAME = Duppy;
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "duppy2/nstask-bridge.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
