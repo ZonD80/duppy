@@ -97,6 +97,7 @@ class ViewController: UIViewController , UITableViewDataSource , UITableViewDele
                 try FileManager.default.createDirectory(atPath: localPath+"/work_dir/Payload", withIntermediateDirectories: true, attributes: nil)
             } catch {
                 print("unable to create temp dir \(error)");
+                NSLog("unable to create temp dir \(error)");
                 self.isAppCloningNow = false;
                 self.setStatusText(text: "ERROR: unable to create temp dir")
                 return;
