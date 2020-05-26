@@ -40,7 +40,7 @@ class ViewController: UIViewController , UITableViewDataSource , UITableViewDele
         return output!
     }
     
-    let localPathURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0];
+    let localPathURL = FileManager.default.temporaryDirectory;
     var isAppCloningNow: Bool = false;
     let selfAppPath = Bundle.main.bundlePath;
     
@@ -106,6 +106,7 @@ class ViewController: UIViewController , UITableViewDataSource , UITableViewDele
                 self.isAppCloningNow = false;
                 self.setStatusText(text: "ERROR: unable to create temp dir \(localPath)/work_dir/Payload")
                 return;
+            
             }
             
             self.log("Copying app data")
@@ -116,7 +117,7 @@ class ViewController: UIViewController , UITableViewDataSource , UITableViewDele
             }
             catch {
                 self.log("unable to copy dir \(error)");
-                self.setStatusText(text: "ERROR: unable to remove temp dir")
+                self.setStatusText(text: "ERROR: unable to copy original app data")
                 self.isAppCloningNow = false;
                 return;
             }
@@ -388,7 +389,6 @@ class ViewController: UIViewController , UITableViewDataSource , UITableViewDele
         statusText.numberOfLines = 0;
         
         super.viewDidLoad()
-        
         
         self.log("app path is \(self.selfAppPath)")
         self.log("documents path URL is \(self.localPathURL)");
