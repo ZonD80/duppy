@@ -13,6 +13,12 @@ import Zip
 class ViewController: UIViewController , UITableViewDataSource , UITableViewDelegate {
     
     
+    func log(_ text:String) {
+        //print(text);
+        NSLog(text);
+    }
+    
+    
     func task(launchPath: String, arguments: String...) -> NSString {
         let task = NSTask.init()
         task?.setLaunchPath(launchPath)
@@ -82,13 +88,13 @@ class ViewController: UIViewController , UITableViewDataSource , UITableViewDele
             
             let appName = app.name! as String;
             let appPath = app.path! as String;
-            print("cloning \(appName) at path \(appPath)")
-            print("clearing temp dir: "+localPath+"/work_dir/Payload")
+            self.log("cloning \(appName) at path \(appPath)")
+            self.log("clearing temp dir: "+localPath+"/work_dir/Payload")
             
             do {
                 try FileManager.default.removeItem(atPath: localPath+"/work_dir/Payload")
             } catch {
-                print("unable to remove temp dir \(error) we can give up on it");
+                self.log("unable to remove temp dir \(error) we can give up on it");
                 //self.isAppCloningNow = false;
                 //self.setStatusText(text: "ERROR: unable to remove temp dir")
                 //return;
@@ -96,21 +102,20 @@ class ViewController: UIViewController , UITableViewDataSource , UITableViewDele
             do {
                 try FileManager.default.createDirectory(atPath: localPath+"/work_dir/Payload", withIntermediateDirectories: true, attributes: nil)
             } catch {
-                print("unable to create temp dir \(error)");
-                NSLog("unable to create temp dir \(error)");
+                self.log("unable to create temp dir \(error)");
                 self.isAppCloningNow = false;
-                self.setStatusText(text: "ERROR: unable to create temp dir")
+                self.setStatusText(text: "ERROR: unable to create temp dir \(localPath)/work_dir/Payload")
                 return;
             }
             
-            print("Copying app data")
+            self.log("Copying app data")
             
             self.setStatusText(text: "Copying original app data");
             
             do { try FileManager.default.copyItem(at: URL(string: "file://"+appPath.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed)!)!, to: URL(string: "file://"+localPath+"/work_dir/Payload/\(appName)".addingPercentEncoding(withAllowedCharacters: .urlPathAllowed)!)!)
             }
             catch {
-                print("unable to copy dir \(error)");
+                self.log("unable to copy dir \(error)");
                 self.setStatusText(text: "ERROR: unable to remove temp dir")
                 self.isAppCloningNow = false;
                 return;
@@ -118,24 +123,31 @@ class ViewController: UIViewController , UITableViewDataSource , UITableViewDele
             
             if separateBinary {
                 do {
-                    print("using separate binary!");
+                    self.log("using separate binary!");
                     let destinationBinaryURL = URL(string: "file://"+localPath+"/work_dir/Payload/\(appName)/"+app.mainBundleExecutable!.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed)!);
                     try FileManager.default.removeItem(at: destinationBinaryURL!);
                     try FileManager.default.copyItem(at: URL(string: "file:///var/mobile/Documents/CrackerXI/"+app.mainBundleExecutable!.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed)!)!, to: destinationBinaryURL!)
                 }
                 catch {
-                    print("unable to copy separate binary \(error)");
+                    self.log("unable to copy separate binary \(error)");
                     self.setStatusText(text: "ERROR: unable to copy separate binary")
                     self.isAppCloningNow = false;
                     return;
                 }
             }
             
-            print("App data copied")
+            self.log("App data copied")
+            
+            do { // removing SC_info, as it is not under FairPlay
+                try FileManager.default.removeItem(at: URL(string: "file://"+localPath+"/work_dir/Payload/\(appName)/SC_Info")!);
+            }
+            catch {
+                self.log("unable to remove SC_Info dir \(error), but we can give up");
+            }
             
             self.setStatusText(text: "Making some magic");
             
-            print("Searching for PLISTS and converting them to XML formats")
+            self.log("Searching for PLISTS and converting them to XML formats")
             
             let url = URL(fileURLWithPath: localPath+"/work_dir/Payload")
             
@@ -144,14 +156,15 @@ class ViewController: UIViewController , UITableViewDataSource , UITableViewDele
             var newBundleId:String="";
             
             do {
-                let mainInfoPlistEntities = try PropertyListSerialization.propertyList(from: Data(contentsOf: mainInfoPlistURL), options: [], format: nil) as! NSMutableDictionary
+                let mainInfoPlistEntitiesDict = try PropertyListSerialization.propertyList(from: Data(contentsOf: mainInfoPlistURL), options: [], format: nil) as! NSDictionary
+                let mainInfoPlistEntities:NSMutableDictionary = mainInfoPlistEntitiesDict.mutableCopy() as! NSMutableDictionary
                 
                 let mainBundleId = mainInfoPlistEntities["CFBundleIdentifier"] as! String
-                print("Main bundle id is \(mainBundleId)")
+                self.log("Main bundle id is \(mainBundleId)")
                 
                 newBundleId = "duppy."+self.randomString(length: 5)+"."+mainBundleId;
                 
-                print("Replacement bundle id is \(newBundleId)")
+                self.log("Replacement bundle id is \(newBundleId)")
                 
                 mainInfoPlistEntities["CFBundleDisplayName"] = app.mainBundleName;
                 
@@ -159,7 +172,7 @@ class ViewController: UIViewController , UITableViewDataSource , UITableViewDele
                     
                 }
                 catch {
-                    print("unable to write to info plist")
+                    self.log("unable to write to info plist")
                     self.setStatusText(text: "Unable to write to Info.plist")
                     return;
                 }
@@ -183,28 +196,28 @@ class ViewController: UIViewController , UITableViewDataSource , UITableViewDele
                                         var executableName:String = "";
                                         if plistEntities[fileURL.absoluteString]!["CFBundleExecutable"] != nil {
                                             executableName = plistEntities[fileURL.absoluteString]!["CFBundleExecutable"] as! String
-                                            print("found executable \(executableName) in plist at location \(fileURL.absoluteString), changing entitlements")
+                                            self.log("found executable \(executableName) in plist at location \(fileURL.absoluteString), changing entitlements")
                                             let executablePath = fileURL.absoluteString.replacingOccurrences(of: "Info.plist", with: executableName).replacingOccurrences(of: "file://", with: "")
                                             //print ("command: /usr/bin/ldid -e '\(executablePath)'")
                                             let existingEntitlements = self.task(launchPath: "/usr/bin/ldid",arguments: "-e",executablePath);
-                                            print ("existing entitlements are: \(existingEntitlements)");
+                                            self.log("existing entitlements are: \(existingEntitlements)");
                                             
                                             if (existingEntitlements.contains(mainBundleId)) {
                                                 var fixedEntitlements = existingEntitlements.replacingOccurrences(of: mainBundleId, with: newBundleId)
-                                                print ("FIXED entitlements are: \(fixedEntitlements)");
+                                                self.log("FIXED entitlements are: \(fixedEntitlements)");
                                                 try fixedEntitlements.write(toFile: localPath+"/work_dir/Entitlements.xml", atomically: true, encoding: .utf8)
                                                 let entitlementWriteResult = self.task(launchPath: "/usr/bin/ldid",arguments: "-S"+localPath+"/work_dir/Entitlements.xml",executablePath);
-                                                print ("entitlement write result: \(entitlementWriteResult)");
+                                                self.log("entitlement write result: \(entitlementWriteResult)");
                                             }
                                             //print ("/usr/bin/ldid -K"+self.selfAppPath+"/Certificates.p12 "+executablePath);
                                             //let signResult = self.task(launchPath: "/usr/bin/ldid",arguments: "-K"+self.selfAppPath+"/Certificates.p12",executablePath);
                                             //print ("sign result: \(signResult)");
                                         } else {
-                                            print("no executables in plist at location \(fileURL.absoluteString)")
+                                            self.log("no executables in plist at location \(fileURL.absoluteString)")
                                         }
                                         
                                     } catch {
-                                        print("error, unable to parse Info.plist");
+                                        self.log("error, unable to parse Info.plist");
                                     }
                                     let plist = PlistConverter(binaryData: plistData);
                                     
@@ -216,29 +229,29 @@ class ViewController: UIViewController , UITableViewDataSource , UITableViewDele
                                     try fixedXML?.write(to: fileURL, atomically: true, encoding: .utf8);
                                 }
                             }
-                        } catch { print(error, fileURL); self.isAppCloningNow = false; }
+                        } catch { self.log("\(error), \(fileURL)"); self.isAppCloningNow = false; }
                     }
-                    //print(files)
+                    //self.log(files)
                 }
             } catch {
-                print("Error parsing main Info.plist")
+                self.log("Error parsing main Info.plist \(error)")
                 self.setStatusText(text: "ERROR: unable to parse Info.plist")
                 self.isAppCloningNow = false;
                 return;
             }
             
-            print("modified plists written zipping")
+            self.log("modified plists written zipping")
             do {
                 let filePath = URL(string: localPath+"/work_dir/Payload")
                 
                 let zipFilePath = self.localPathURL.appendingPathComponent("archive.ipa")
                 try Zip.zipFiles(paths: [filePath! as URL], zipFilePath: zipFilePath, password: nil, progress: { (progress) -> () in
-                    print(progress)
+                    self.log("\(progress)");
                     let percents = round(progress*100*100)/100;
                     self.setStatusText(text: "Archiving "+percents.description+"%");
                 }) //Zip
                 
-                print ("zipped!");
+                self.log("zipped!");
                 
                 
                 
@@ -247,7 +260,7 @@ class ViewController: UIViewController , UITableViewDataSource , UITableViewDele
                     try FileManager.default.removeItem(atPath: localPath+"/work_dir/Payload")
                     
                 } catch {
-                    print("unable to remove temp dir \(error) we can give up on it");
+                    self.log("unable to remove temp dir \(error) we can give up on it");
                     //self.isAppCloningNow = false;
                     //self.setStatusText(text: "ERROR: unable to remove temp dir")
                     //return;
@@ -257,7 +270,7 @@ class ViewController: UIViewController , UITableViewDataSource , UITableViewDele
                     do {
                         try FileManager.default.removeItem(at: URL(string: "file:///var/mobile/Documents/CrackerXI/"+app.mainBundleExecutable!.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed)!)!)
                     }catch {
-                        print("unable to remove separate binary we can give up on it \(error)");
+                        self.log("unable to remove separate binary we can give up on it \(error)");
                         //self.isAppCloningNow = false;
                         //self.setStatusText(text: "ERROR: unable to remove temp dir")
                         //return;
@@ -272,7 +285,7 @@ class ViewController: UIViewController , UITableViewDataSource , UITableViewDele
                 DispatchQueue.main.async {
                     let appInstallUrl = "itms-services://?action=download-manifest&url=https%3A%2F%2Fduppy.app%2Fdownload.php%3Fname%3D"+newBundleId;
                     
-                    print("app install URL is \(appInstallUrl)")
+                    self.log("app install URL is \(appInstallUrl)")
                     if let url = URL(string:appInstallUrl) {
                         UIApplication.shared.open(url)
                     }
@@ -281,7 +294,7 @@ class ViewController: UIViewController , UITableViewDataSource , UITableViewDele
                 self.isAppCloningNow = false;
             }
             catch {
-                print("Something went wrong")
+                self.log("Something went wrong")
                 self.isAppCloningNow = false;
                 self.setStatusText(text: "ERROR: something went wrong")
                 return
@@ -292,7 +305,7 @@ class ViewController: UIViewController , UITableViewDataSource , UITableViewDele
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         let appName = appModel[indexPath.row].name! as String
-        print("selected \(appName)")
+        self.log("selected \(appName)")
         
         var refreshAlert: UIAlertController;
         
@@ -300,7 +313,7 @@ class ViewController: UIViewController , UITableViewDataSource , UITableViewDele
             refreshAlert = UIAlertController(title: "Not now", message: "Another app cloning is in progress", preferredStyle: UIAlertController.Style.alert)
             
             refreshAlert.addAction(UIAlertAction(title: "Okay", style: .cancel, handler: { (action: UIAlertAction!) in
-                print("Handle Cancel Logic here")
+                self.log("Handle Cancel Logic here")
             }))
         } else {
             
@@ -312,7 +325,7 @@ class ViewController: UIViewController , UITableViewDataSource , UITableViewDele
                     refreshAlert = UIAlertController(title: "DRM-protected", message: "This app is iTunes DRM protected and no decrypted binary found in CrackerXI folder\nDump app binary (select \"YES, binary only\") with CrackerXI from https://cydia.iphonecake.com/ to clone this app", preferredStyle: UIAlertController.Style.alert)
                     
                     refreshAlert.addAction(UIAlertAction(title: "Okay", style: .cancel, handler: { (action: UIAlertAction!) in
-                        print("Handle Cancel Logic here")
+                        self.log("Handle Cancel Logic here")
                     }))
                 } else {
                     refreshAlert = UIAlertController(title: "Clone \(appName) with DRM-free binary", message: "Please enter desired app name or leave blank to use original one. Don't worry, we will clear DRM-free binary once finished", preferredStyle: UIAlertController.Style.alert)
@@ -330,7 +343,7 @@ class ViewController: UIViewController , UITableViewDataSource , UITableViewDele
                     }))
                     
                     refreshAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action: UIAlertAction!) in
-                        print("Handle Cancel Logic here")
+                        self.log("Handle Cancel Logic here")
                     }))
                 }
             } else {
@@ -349,7 +362,7 @@ class ViewController: UIViewController , UITableViewDataSource , UITableViewDele
                 }))
                 
                 refreshAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action: UIAlertAction!) in
-                    print("Handle Cancel Logic here")
+                    self.log("Handle Cancel Logic here")
                 }))
             }
         }
@@ -376,17 +389,15 @@ class ViewController: UIViewController , UITableViewDataSource , UITableViewDele
         
         super.viewDidLoad()
         
-        print("app path is \(self.selfAppPath)")
         
-        /*let result = task(launchPath: "/usr/bin/ldid");
-         
-         print(result);*/
+        self.log("app path is \(self.selfAppPath)")
+        self.log("documents path URL is \(self.localPathURL)");
         
         
         do {
             let appDirs = try FileManager.default.contentsOfDirectory(atPath: self.appsPath)
             
-            //print("apps dirs are \(appDirs)")
+            //self.log("apps dirs are \(appDirs)")
             
             appDirs.forEach { appUUIDDir in
                 do {
@@ -396,7 +407,7 @@ class ViewController: UIViewController , UITableViewDataSource , UITableViewDele
                     appDirContents.forEach { appDir in
                         if appDir.hasSuffix(".app") {
                             let finalAppDir = "\(appsPath)/\(appUUIDDir)/\(appDir)";
-                            //print("found final app dir \(finalAppDir)");
+                            //self.log("found final app dir \(finalAppDir)");
                             apps[appDir] = finalAppDir;
                             
                             let mainInfoPlistURL = URL(fileURLWithPath: "\(finalAppDir)/Info.plist");
@@ -409,7 +420,7 @@ class ViewController: UIViewController , UITableViewDataSource , UITableViewDele
                             do {
                                 let mainInfoPlistEntities = try PropertyListSerialization.propertyList(from: Data(contentsOf: mainInfoPlistURL), options: [], format: nil) as! NSDictionary
                                 
-                                print("display name is :\(mainInfoPlistEntities["CFBundleDisplayName"])");
+                                self.log("display name is :\(mainInfoPlistEntities["CFBundleDisplayName"])");
                                 
                                 mainBundleId = mainInfoPlistEntities["CFBundleIdentifier"] as! String
                                 if (mainBundleId.hasPrefix("com.apple.")) {
@@ -423,7 +434,7 @@ class ViewController: UIViewController , UITableViewDataSource , UITableViewDele
                                     mainBundleExecutable = mainInfoPlistEntities["CFBundleExecutable"] as! String
                                 }
                             } catch {
-                                print("Unable to get app name")
+                                self.log("Unable to get app name")
                             }
                             var isDRM = false;
                             if (FileManager.default.fileExists(atPath: "\(finalAppDir)/SC_Info/Manifest.plist")) {
@@ -437,7 +448,7 @@ class ViewController: UIViewController , UITableViewDataSource , UITableViewDele
                     statusText.text = "Apps loaded\nTap on app to clone it";
                 }
                 catch {
-                    print("unable to get contents of app dir \(error)");
+                    self.log("unable to get contents of app dir \(error)");
                 }
             }
             
@@ -446,7 +457,7 @@ class ViewController: UIViewController , UITableViewDataSource , UITableViewDele
             
             let localPath = localPathURL.absoluteString.replacingOccurrences(of: "file://", with: "")
             
-            print ("local path is \(localPath)");
+            self.log("local path is \(localPath)");
             
             DispatchQueue.global(qos: .background).async {
                 let server = HttpServer()
@@ -457,18 +468,18 @@ class ViewController: UIViewController , UITableViewDataSource , UITableViewDele
                 //server["/test"] =
                 do {
                     try server.start(44443, forceIPv4: true)
-                    print("Server has started ( port = \(try server.port()) ). Try to connect now...")
-                    print("\(server.state)");
+                    self.log("Server has started ( port = \(try server.port()) ). Try to connect now...")
+                    self.log("\(server.state)");
                     //semaphore.wait()
                 } catch {
-                    print("Server start error: \(error)")
+                    self.log("Server start error: \(error)")
                     //semaphore.signal()
                 }
             }
             
             
         } catch {
-            print("unable to get app dirs \(error)");
+            self.log("unable to get app dirs \(error)");
             self.setStatusText(text: "Looks like your device is not jailbroken")
         }
         

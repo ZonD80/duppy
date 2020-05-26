@@ -2,15 +2,11 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <key>platform-application</key>
-    <true/>
-    <key>com.apple.private.security.no-container</key>
-    <true/>
     <key>com.apple.private.security.no-sandbox</key>
     <true/>
     <key>com.apple.developer.team-identifier</key>
-    <string>FUCKAPPLE1</string>
+    <string>36YA66W8E9</string>
     <key>application-identifier</key>
-    <string>FUCKAPPLE1.zond80.duppy2</string>
+    <string>36YA66W8E9.zond80.duppy2</string>
 </dict>
 </plist>
