@@ -22,6 +22,8 @@
 		88D4A5DE247983E500469190 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 88D4A5DD247983E500469190 /* LICENSE */; };
 		88D4A5E0247985C200469190 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 88D4A5DF247985C200469190 /* icon.png */; };
 		88D4A5E22479952D00469190 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 88D4A5E12479952D00469190 /* .gitignore */; };
+		9E1CBA072488CFFB009CE8A7 /* Kingfisher.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E1CBA062488CFFB009CE8A7 /* Kingfisher.framework */; };
+		9E1CBA082488D007009CE8A7 /* Kingfisher.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9E1CBA062488CFFB009CE8A7 /* Kingfisher.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -31,6 +33,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				9E1CBA082488D007009CE8A7 /* Kingfisher.framework in Embed Frameworks */,
 				88D4A5DC2479733100469190 /* Zip.framework in Embed Frameworks */,
 				88D4A5D9247972EE00469190 /* Swifter.framework in Embed Frameworks */,
 			);
@@ -57,6 +60,7 @@
 		88D4A5DD247983E500469190 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		88D4A5DF247985C200469190 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
 		88D4A5E12479952D00469190 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		9E1CBA062488CFFB009CE8A7 /* Kingfisher.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Kingfisher.framework; path = Carthage/Build/iOS/Kingfisher.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,6 +69,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				88D4A5DB2479733100469190 /* Zip.framework in Frameworks */,
+				9E1CBA072488CFFB009CE8A7 /* Kingfisher.framework in Frameworks */,
 				88D4A5D8247972EE00469190 /* Swifter.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -113,6 +118,7 @@
 		88D4A5C52479409500469190 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				9E1CBA062488CFFB009CE8A7 /* Kingfisher.framework */,
 				88D4A5C62479409500469190 /* Swifter.framework */,
 				88D4A5C72479409500469190 /* Zip.framework */,
 			);

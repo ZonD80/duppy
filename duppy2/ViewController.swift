@@ -9,6 +9,7 @@
 import UIKit
 import Swifter
 import Zip
+import Kingfisher
 
 class ViewController: UIViewController , UITableViewDataSource , UITableViewDelegate {
     
@@ -49,24 +50,37 @@ class ViewController: UIViewController , UITableViewDataSource , UITableViewDele
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell()
-        let label = UILabel(frame: CGRect(x:0, y:0, width:UIScreen.main.fixedCoordinateSpace.bounds.width, height:50))
-        label.numberOfLines = 0;
+        var cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier")
+        if cell == nil {
+            cell = UITableViewCell(style: .value2, reuseIdentifier: "reuseIdentifier")
+        }
+        let text1:String!
+        let text2:String!
+        
         if (appModel[indexPath.row].isDRM!) {
             if (!FileManager.default.fileExists(atPath: "/var/mobile/Documents/CrackerXI/"+appModel[indexPath.row].mainBundleExecutable!)) {
-                label.text = "\(appModel[indexPath.row].mainBundleName! as String) (not cloneable)\nDRM-protected.";
+                text1 = "❌ \(appModel[indexPath.row].mainBundleName! as String)"
+                text2 = "DRM-protected."
             } else {
-                label.text = "\(appModel[indexPath.row].mainBundleName! as String) (cloneable)\nDRM-protected.";
+                text1 = "✅ \(appModel[indexPath.row].mainBundleName! as String)"
+                text2 = "DRM-protected."
             }
         } else {
-            label.text = "\(appModel[indexPath.row].mainBundleName! as String) (cloneable)\n\(appModel[indexPath.row].name! as String)";
+            text1 = "✅ \(appModel[indexPath.row].mainBundleName! as String)"
+            text2 = "Not DRM-protected."
         }
         
-        cell.addSubview(label)
-        return cell
-    }
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return 50
+        cell?.textLabel?.text = text1
+        cell?.detailTextLabel?.text = text2
+        if (arrayIcon[indexPath.row] == "noicon") {
+            cell?.imageView?.image = nil
+        }
+        else {
+             cell?.imageView?.kf.setImage(with: URL(fileURLWithPath: arrayIcon[indexPath.row]), placeholder: UIImage(named: "icon.png"))
+        }
+        cell?.imageView?.layer.cornerRadius = 10
+        cell?.imageView?.clipsToBounds = true
+        return cell!
     }
     
     func setStatusText(text: String) {
@@ -291,7 +305,7 @@ class ViewController: UIViewController , UITableViewDataSource , UITableViewDele
                         UIApplication.shared.open(url)
                     }
                 }
-                self.setStatusText(text: "Duppied!\nDon't close this app till duplicate be installed");
+                self.setStatusText(text: "Duppied!\nDon't close this app until duplicate is installed");
                 self.isAppCloningNow = false;
             }
             catch {
@@ -383,6 +397,7 @@ class ViewController: UIViewController , UITableViewDataSource , UITableViewDele
     var apps: [String: String] = [:];
     
     var appModel = [app]()
+    var arrayIcon:Array<String> = []
     
     override func viewDidLoad() {
         
@@ -430,12 +445,30 @@ class ViewController: UIViewController , UITableViewDataSource , UITableViewDele
                                 if mainInfoPlistEntities["CFBundleDisplayName"] != nil {
                                     mainBundleName = mainInfoPlistEntities["CFBundleDisplayName"] as! String
                                 }
+                                else {
+                                    mainBundleName = mainInfoPlistEntities["CFBundleName"] as! String
+                                }
                                 if mainInfoPlistEntities["CFBundleExecutable"] != nil {
                                     mainBundleExecutable = mainInfoPlistEntities["CFBundleExecutable"] as! String
                                 }
                             } catch {
                                 self.log("Unable to get app name")
                             }
+                            
+                            let enumerator = FileManager.default.enumerator(atPath: finalAppDir)
+                            let filePaths = enumerator?.allObjects as! [String]
+                            let txtFilePaths = filePaths.filter{$0.contains("60x60@2x")}
+                            var saveString:String!
+                            for txtFilePath in txtFilePaths{
+                                saveString = "\(finalAppDir)/\(txtFilePath)"
+                            }
+                            if (saveString == nil) {
+                                arrayIcon.append("noicon")
+                            }
+                            else {
+                                arrayIcon.append(saveString)
+                            }
+                            
                             var isDRM = false;
                             if (FileManager.default.fileExists(atPath: "\(finalAppDir)/SC_Info/Manifest.plist")) {
                                 isDRM = true;
