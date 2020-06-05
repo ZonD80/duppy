@@ -64,21 +64,21 @@ class ViewController: UIViewController , UITableViewDataSource , UITableViewDele
         
         if (appModel[indexPath.row].isDRM!) {
             if (!FileManager.default.fileExists(atPath: "/var/mobile/Documents/CrackerXI/"+appModel[indexPath.row].mainBundleExecutable!)) {
-                text1 = "⚠️ \(appModel[indexPath.row].mainBundleName! as String)"
+                text1 = "⚠️ \(appModel[indexPath.row].mainBundleName! as String) - v\(appModel[indexPath.row].mainBundleVersion! as String)"
                 text2 = "DRM-protected."
             } else {
-                text1 = "✅ \(appModel[indexPath.row].mainBundleName! as String)"
+                text1 = "✅ \(appModel[indexPath.row].mainBundleName! as String) - v\(appModel[indexPath.row].mainBundleVersion! as String)"
                 text2 = "DRM-protected."
             }
         } else {
-            text1 = "✅ \(appModel[indexPath.row].mainBundleName! as String)"
+            text1 = "✅ \(appModel[indexPath.row].mainBundleName! as String) - v\(appModel[indexPath.row].mainBundleVersion! as String)"
             text2 = "Not DRM-protected."
         }
         
         cell?.textLabel?.text = text1
         cell?.detailTextLabel?.text = text2
         if (appModel[indexPath.row].icon == "noicon") {
-            cell?.imageView?.image = nil
+            cell?.imageView?.kf.setImage(with: URL(fileURLWithPath: "/System/Library/PrivateFrameworks/MobileIcons.framework/DefaultIcon-60@2x~iphone.png"), placeholder: UIImage(named: "icon.png"))
         }
         else {
             cell?.imageView?.kf.setImage(with: URL(fileURLWithPath: appModel[indexPath.row].icon!), placeholder: UIImage(named: "icon.png"))
@@ -324,7 +324,9 @@ class ViewController: UIViewController , UITableViewDataSource , UITableViewDele
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        let appName = appModel[indexPath.row].name! as String
+        tableView.deselectRow(at: indexPath, animated: true)
+        
+        let appName = appModel[indexPath.row].mainBundleName! as String
         self.log("selected \(appName)")
         
         var refreshAlert: UIAlertController;
@@ -436,6 +438,7 @@ class ViewController: UIViewController , UITableViewDataSource , UITableViewDele
                             
                             var mainBundleExecutable:String = "";
                             var mainBundleIcon:String = ""
+                            var mainBundleVersion:String = ""
                             
                             do {
                                 let mainInfoPlistEntities = try PropertyListSerialization.propertyList(from: Data(contentsOf: mainInfoPlistURL), options: [], format: nil) as! NSDictionary
@@ -465,6 +468,9 @@ class ViewController: UIViewController , UITableViewDataSource , UITableViewDele
                                 else {
                                     mainBundleIcon = "noicon"
                                 }
+                                if mainInfoPlistEntities["CFBundleShortVersionString"] != nil {
+                                    mainBundleVersion = mainInfoPlistEntities["CFBundleShortVersionString"] as! String
+                                }
                             } catch {
                                 self.log("Unable to get app name")
                             }
@@ -473,7 +479,7 @@ class ViewController: UIViewController , UITableViewDataSource , UITableViewDele
                             if (FileManager.default.fileExists(atPath: "\(finalAppDir)/SC_Info/Manifest.plist")) {
                                 isDRM = true;
                             }
-                            let appObject = app(name: appDir, icon: mainBundleIcon, path: finalAppDir, mainBundleId: mainBundleId, mainBundleName: mainBundleName, isDRM:isDRM,mainBundleExecutable: mainBundleExecutable);
+                            let appObject = app(name: appDir, icon: mainBundleIcon, path: finalAppDir, mainBundleId: mainBundleId, mainBundleName: mainBundleName, isDRM:isDRM,mainBundleExecutable: mainBundleExecutable, mainBundleVersion: mainBundleVersion);
                             appModel.append(appObject);
                             return;
                         }

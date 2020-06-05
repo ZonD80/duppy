@@ -17,9 +17,10 @@ class app:NSObject{
     var mainBundleId: String?
     var mainBundleName: String?
     var mainBundleExecutable: String?
+    var mainBundleVersion: String?
     var isDRM: Bool?
     
-    init(name:String,icon:String,path:String,mainBundleId:String,mainBundleName:String,isDRM:Bool,mainBundleExecutable:String) {
+    init(name:String,icon:String,path:String,mainBundleId:String,mainBundleName:String,isDRM:Bool,mainBundleExecutable:String,mainBundleVersion:String) {
         self.name = name;
         self.icon = icon;
         self.path = path;
@@ -27,5 +28,6 @@ class app:NSObject{
         self.mainBundleName = mainBundleName;
         self.isDRM = isDRM;
         self.mainBundleExecutable = mainBundleExecutable;
+        self.mainBundleVersion = mainBundleVersion;
     }
 }
