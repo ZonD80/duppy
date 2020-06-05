@@ -59,7 +59,7 @@ class ViewController: UIViewController , UITableViewDataSource , UITableViewDele
         
         if (appModel[indexPath.row].isDRM!) {
             if (!FileManager.default.fileExists(atPath: "/var/mobile/Documents/CrackerXI/"+appModel[indexPath.row].mainBundleExecutable!)) {
-                text1 = "❌ \(appModel[indexPath.row].mainBundleName! as String)"
+                text1 = "⚠️ \(appModel[indexPath.row].mainBundleName! as String)"
                 text2 = "DRM-protected."
             } else {
                 text1 = "✅ \(appModel[indexPath.row].mainBundleName! as String)"
@@ -72,11 +72,11 @@ class ViewController: UIViewController , UITableViewDataSource , UITableViewDele
         
         cell?.textLabel?.text = text1
         cell?.detailTextLabel?.text = text2
-        if (arrayIcon[indexPath.row] == "noicon") {
+        if (appModel[indexPath.row].icon == "noicon") {
             cell?.imageView?.image = nil
         }
         else {
-             cell?.imageView?.kf.setImage(with: URL(fileURLWithPath: arrayIcon[indexPath.row]), placeholder: UIImage(named: "icon.png"))
+            cell?.imageView?.kf.setImage(with: URL(fileURLWithPath: appModel[indexPath.row].icon!), placeholder: UIImage(named: "icon.png"))
         }
         cell?.imageView?.layer.cornerRadius = 10
         cell?.imageView?.clipsToBounds = true
@@ -397,7 +397,6 @@ class ViewController: UIViewController , UITableViewDataSource , UITableViewDele
     var apps: [String: String] = [:];
     
     var appModel = [app]()
-    var arrayIcon:Array<String> = []
     
     override func viewDidLoad() {
         
@@ -431,6 +430,7 @@ class ViewController: UIViewController , UITableViewDataSource , UITableViewDele
                             var mainBundleName:String = appDir;
                             
                             var mainBundleExecutable:String = "";
+                            var mainBundleIcon:String = ""
                             
                             do {
                                 let mainInfoPlistEntities = try PropertyListSerialization.propertyList(from: Data(contentsOf: mainInfoPlistURL), options: [], format: nil) as! NSDictionary
@@ -451,29 +451,24 @@ class ViewController: UIViewController , UITableViewDataSource , UITableViewDele
                                 if mainInfoPlistEntities["CFBundleExecutable"] != nil {
                                     mainBundleExecutable = mainInfoPlistEntities["CFBundleExecutable"] as! String
                                 }
+                                if mainInfoPlistEntities["CFBundleIcons"] != nil {
+                                    let findIcons = mainInfoPlistEntities["CFBundleIcons"] as! NSDictionary
+                                    let primaryIcons = findIcons["CFBundlePrimaryIcon"] as! NSDictionary
+                                    let locateIconName = primaryIcons["CFBundleIconFiles"] as! NSArray
+                                    mainBundleIcon = "\(finalAppDir)/\(locateIconName.lastObject as! String)@2x.png"
+                                }
+                                else {
+                                    mainBundleIcon = "noicon"
+                                }
                             } catch {
                                 self.log("Unable to get app name")
-                            }
-                            
-                            let enumerator = FileManager.default.enumerator(atPath: finalAppDir)
-                            let filePaths = enumerator?.allObjects as! [String]
-                            let txtFilePaths = filePaths.filter{$0.contains("60x60@2x")}
-                            var saveString:String!
-                            for txtFilePath in txtFilePaths{
-                                saveString = "\(finalAppDir)/\(txtFilePath)"
-                            }
-                            if (saveString == nil) {
-                                arrayIcon.append("noicon")
-                            }
-                            else {
-                                arrayIcon.append(saveString)
                             }
                             
                             var isDRM = false;
                             if (FileManager.default.fileExists(atPath: "\(finalAppDir)/SC_Info/Manifest.plist")) {
                                 isDRM = true;
                             }
-                            let appObject = app(name: appDir, path: finalAppDir, mainBundleId: mainBundleId, mainBundleName: mainBundleName, isDRM:isDRM,mainBundleExecutable: mainBundleExecutable);
+                            let appObject = app(name: appDir, icon: mainBundleIcon, path: finalAppDir, mainBundleId: mainBundleId, mainBundleName: mainBundleName, isDRM:isDRM,mainBundleExecutable: mainBundleExecutable);
                             appModel.append(appObject);
                             return;
                         }

@@ -12,14 +12,16 @@ import UIKit
 class app:NSObject{
 
     var name:String?
+    var icon:String?
     var path : String?
     var mainBundleId: String?
     var mainBundleName: String?
     var mainBundleExecutable: String?
     var isDRM: Bool?
     
-    init(name:String,path:String,mainBundleId:String,mainBundleName:String,isDRM:Bool,mainBundleExecutable:String) {
+    init(name:String,icon:String,path:String,mainBundleId:String,mainBundleName:String,isDRM:Bool,mainBundleExecutable:String) {
         self.name = name;
+        self.icon = icon;
         self.path = path;
         self.mainBundleId = mainBundleId;
         self.mainBundleName = mainBundleName;
