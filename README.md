@@ -23,6 +23,7 @@ That's it!
 ## Dependencies
 * [swifter](https://github.com/httpswift/swifter) - Tiny http server engine written in Swift programming language
 * [Zip](https://github.com/marmelroy/Zip) - Swift framework for zipping and unzipping files
+* [Kingfisher](https://github.com/onevcat/Kingfisher) - A lightweight, pure-Swift library for downloading and caching images from the web.
 
 ## Install
 You can download the latest .ipa from [Duppy.app](https://duppy.app) website by tapping on install link. **Do not use another installers, as they may break IPA**.
