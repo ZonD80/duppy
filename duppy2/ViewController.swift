@@ -13,7 +13,12 @@ import Kingfisher
 
 class ViewController: UIViewController , UITableViewDataSource , UITableViewDelegate {
     
+    @IBOutlet weak var othersAckButton: UIButton!
     
+    @IBAction func tapOtherAckButton(_ sender: Any) {
+        guard let url = URL(string: "https://github.com/ZonD80/duppy/graphs/contributors") else { return }
+        UIApplication.shared.open(url)
+    }
     func log(_ text:String) {
         //print(text);
         NSLog(text);

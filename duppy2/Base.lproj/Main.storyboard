@@ -11,7 +11,7 @@
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="duppy2" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="Duppy" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -52,28 +52,42 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Made with ❤️ by ZonD80" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iAA-dJ-NWW" userLabel="CopyrightText">
-                                <rect key="frame" x="108.5" y="862" width="197" height="20.5"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
+                            <stackView opaque="NO" contentMode="scaleToFill" spacing="3" translatesAutoresizingMaskIntoConstraints="NO" id="N6Z-m1-HFY">
+                                <rect key="frame" x="66" y="853" width="282" height="33"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Made with ❤️ by ZonD80" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iAA-dJ-NWW" userLabel="CopyrightText">
+                                        <rect key="frame" x="0.0" y="0.0" width="197" height="33"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HaH-gX-2rQ">
+                                        <rect key="frame" x="200" y="0.0" width="82" height="33"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <state key="normal" title="and others"/>
+                                        <connections>
+                                            <action selector="tapOtherAckButton:" destination="BYZ-38-t0r" eventType="primaryActionTriggered" id="jRY-er-JwO"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                            </stackView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="gxT-8I-arb" secondAttribute="bottom" id="3QO-Lf-b7g"/>
+                            <constraint firstAttribute="bottom" secondItem="N6Z-m1-HFY" secondAttribute="bottom" constant="10" id="Es4-c2-fUO"/>
                             <constraint firstItem="WVe-g0-7ZF" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="VPf-mv-4Pv"/>
                             <constraint firstItem="WVe-g0-7ZF" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Z4s-QG-sks"/>
-                            <constraint firstItem="iAA-dJ-NWW" firstAttribute="top" secondItem="gxT-8I-arb" secondAttribute="bottom" id="fny-Ot-TUv"/>
+                            <constraint firstItem="N6Z-m1-HFY" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="ZLJ-Hm-dYh"/>
                             <constraint firstItem="gxT-8I-arb" firstAttribute="top" secondItem="WVe-g0-7ZF" secondAttribute="bottom" id="h2f-JD-DxX"/>
                             <constraint firstItem="gxT-8I-arb" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="hCT-Z6-OfM"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="gxT-8I-arb" secondAttribute="trailing" id="obb-Xh-Poy"/>
-                            <constraint firstItem="iAA-dJ-NWW" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="uFq-71-1Eq"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
                         <outlet property="appsTableView" destination="gxT-8I-arb" id="Y4U-08-HpY"/>
+                        <outlet property="othersAckButton" destination="HaH-gX-2rQ" id="ESK-Do-ZMa"/>
                         <outlet property="statusText" destination="WVe-g0-7ZF" id="xHH-vf-V1b"/>
                     </connections>
                 </viewController>
