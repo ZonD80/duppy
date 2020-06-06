@@ -64,14 +64,14 @@ class ViewController: UIViewController , UITableViewDataSource , UITableViewDele
         
         if (appModel[indexPath.row].isDRM!) {
             if (!FileManager.default.fileExists(atPath: "/var/mobile/Documents/CrackerXI/"+appModel[indexPath.row].mainBundleExecutable!)) {
-                text1 = "⚠️ \(appModel[indexPath.row].mainBundleName! as String) - v\(appModel[indexPath.row].mainBundleVersion! as String)"
+                text1 = "⚠️ \(appModel[indexPath.row].mainBundleName! as String)"
                 text2 = "DRM-protected."
             } else {
-                text1 = "✅ \(appModel[indexPath.row].mainBundleName! as String) - v\(appModel[indexPath.row].mainBundleVersion! as String)"
+                text1 = "✅ \(appModel[indexPath.row].mainBundleName! as String)"
                 text2 = "DRM-protected."
             }
         } else {
-            text1 = "✅ \(appModel[indexPath.row].mainBundleName! as String) - v\(appModel[indexPath.row].mainBundleVersion! as String)"
+            text1 = "✅ \(appModel[indexPath.row].mainBundleName! as String)"
             text2 = "Not DRM-protected."
         }
         
@@ -86,6 +86,26 @@ class ViewController: UIViewController , UITableViewDataSource , UITableViewDele
         cell?.imageView?.layer.cornerRadius = 10
         cell?.imageView?.clipsToBounds = true
         return cell!
+    }
+    
+    func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
+        let fm = FileManager.default
+        let size = fm.directorySize(URL(fileURLWithPath: appModel[indexPath.row].path!))
+        var refreshAlert: UIAlertController;
+        refreshAlert = UIAlertController(title: "\(appModel[indexPath.row].mainBundleName! as String)", message: "Version: \(appModel[indexPath.row].mainBundleVersion! as String)\nSize: \(humanReadableByteCount(bytes: size!))\nID: \(appModel[indexPath.row].mainBundleId! as String)", preferredStyle: UIAlertController.Style.alert)
+        
+        refreshAlert.addAction(UIAlertAction(title: "Close", style: .cancel, handler: { (action: UIAlertAction!) in
+        }))
+        present(refreshAlert, animated: true, completion: nil)
+        
+    }
+    
+    func humanReadableByteCount(bytes: Int) -> String {
+        if (bytes < 1000) { return "\(bytes) B" }
+        let exp = Int(log2(Double(bytes)) / log2(1000.0))
+        let unit = ["KB", "MB", "GB", "TB", "PB", "EB"][exp - 1]
+        let number = Double(bytes) / pow(1000, Double(exp))
+        return String(format: "%.1f %@", number, unit)
     }
     
     func setStatusText(text: String) {
@@ -525,4 +545,33 @@ class ViewController: UIViewController , UITableViewDataSource , UITableViewDele
     }
     
     
+}
+
+extension URL {
+    var fileSize: Int? { // in bytes
+        do {
+            let val = try self.resourceValues(forKeys: [.totalFileAllocatedSizeKey, .fileAllocatedSizeKey])
+            return val.totalFileAllocatedSize ?? val.fileAllocatedSize
+        } catch {
+            print(error)
+            return nil
+        }
+    }
+}
+
+extension FileManager {
+    func directorySize(_ dir: URL) -> Int? { // in bytes
+        if let enumerator = self.enumerator(at: dir, includingPropertiesForKeys: [], options: [], errorHandler: { (_, error) -> Bool in
+            print(error)
+            return false
+        }) {
+            var bytes = 0
+            for case let url as URL in enumerator {
+                bytes += url.fileSize ?? 0
+            }
+            return bytes
+        } else {
+            return nil
+        }
+    }
 }
