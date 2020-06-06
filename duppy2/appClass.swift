@@ -19,8 +19,9 @@ class app:NSObject{
     var mainBundleExecutable: String?
     var mainBundleVersion: String?
     var isDRM: Bool?
+    var trackId: String?
     
-    init(name:String,icon:String,path:String,mainBundleId:String,mainBundleName:String,isDRM:Bool,mainBundleExecutable:String,mainBundleVersion:String) {
+    init(name:String,icon:String,path:String,mainBundleId:String,mainBundleName:String,isDRM:Bool,mainBundleExecutable:String,mainBundleVersion:String,trackId:String) {
         self.name = name;
         self.icon = icon;
         self.path = path;
@@ -29,5 +30,6 @@ class app:NSObject{
         self.isDRM = isDRM;
         self.mainBundleExecutable = mainBundleExecutable;
         self.mainBundleVersion = mainBundleVersion;
+        self.trackId = trackId;
     }
 }

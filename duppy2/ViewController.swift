@@ -217,8 +217,6 @@ class ViewController: UIViewController , UITableViewDataSource , UITableViewDele
                     return;
                 }
                 
-                
-                var files = [URL]()
                 var plistEntities: [String:NSDictionary] = [:];
                 
                 if let enumerator = FileManager.default.enumerator(at: url, includingPropertiesForKeys: [], options: []) {
@@ -369,6 +367,16 @@ class ViewController: UIViewController , UITableViewDataSource , UITableViewDele
                     refreshAlert.addAction(UIAlertAction(title: "Okay", style: .cancel, handler: { (action: UIAlertAction!) in
                         self.log("Handle Cancel Logic here")
                     }))
+                    
+                    if appModel[indexPath.row].trackId != "" {
+                    refreshAlert.addAction(UIAlertAction(title: "Get DRM-free from appdb", style: .default, handler: { (action: UIAlertAction!) in
+                        
+                        let redirectURL = "https://appdb.to/view.php?trackid="+self.appModel[indexPath.row].trackId!+"&type=ios";
+                        self.log("redirecting to appdb to \(redirectURL)")
+                        guard let url = URL(string: redirectURL) else { return }
+                        UIApplication.shared.open(url)
+                    }))
+                    }
                 } else {
                     refreshAlert = UIAlertController(title: "Clone \(appName) with DRM-free binary", message: "Please enter desired app name or leave blank to use original one. Don't worry, we will clear DRM-free binary once finished", preferredStyle: UIAlertController.Style.alert)
                     
@@ -453,6 +461,22 @@ class ViewController: UIViewController , UITableViewDataSource , UITableViewDele
                             
                             let mainInfoPlistURL = URL(fileURLWithPath: "\(finalAppDir)/Info.plist");
                             
+
+                            
+                            let iTunesMetadataPlistURL = URL(fileURLWithPath: "\(appsPath)/\(appUUIDDir)/iTunesMetadata.plist");
+                            
+                            var iTunesMetadataPlistEntities:NSDictionary = [:];
+                            
+                            var trackId:String = "";
+                            
+                            do {
+                                iTunesMetadataPlistEntities = try PropertyListSerialization.propertyList(from: Data(contentsOf: iTunesMetadataPlistURL), options: [], format: nil) as! NSDictionary
+                                trackId = String(describing: iTunesMetadataPlistEntities["itemId"] ?? "") // wtf. it is stupid af
+                            } catch {
+                                self.log("App is not from appstore. okay");
+                            }
+                            
+                            
                             var mainBundleId:String = appDir;
                             var mainBundleName:String = appDir;
                             
@@ -499,7 +523,7 @@ class ViewController: UIViewController , UITableViewDataSource , UITableViewDele
                             if (FileManager.default.fileExists(atPath: "\(finalAppDir)/SC_Info/Manifest.plist")) {
                                 isDRM = true;
                             }
-                            let appObject = app(name: appDir, icon: mainBundleIcon, path: finalAppDir, mainBundleId: mainBundleId, mainBundleName: mainBundleName, isDRM:isDRM,mainBundleExecutable: mainBundleExecutable, mainBundleVersion: mainBundleVersion);
+                            let appObject = app(name: appDir, icon: mainBundleIcon, path: finalAppDir, mainBundleId: mainBundleId, mainBundleName: mainBundleName, isDRM:isDRM,mainBundleExecutable: mainBundleExecutable, mainBundleVersion: mainBundleVersion, trackId: trackId);
                             appModel.append(appObject);
                             return;
                         }
