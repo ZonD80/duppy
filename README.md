@@ -53,7 +53,6 @@ GNU General Public License v3.0. See [LICENSE](LICENSE) file for further informa
 I personally feel fine with existing features, but this is what you can improve by making a PR:
 
 * Find a way to integrate [frida-ios-dump](https://github.com/AloneMonkey/frida-ios-dump) or any other binary dumper
-* Add app icons to table
 * Make webserver that is used for itms-services run when app is minimised
 * Make interface more fancy
 * Allow to update duplicated app by specifying alongside bundle ID manually
