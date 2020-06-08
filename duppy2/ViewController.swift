@@ -11,9 +11,10 @@ import Swifter
 import Zip
 import Kingfisher
 
-class ViewController: UIViewController , UITableViewDataSource , UITableViewDelegate {
+class ViewController: UIViewController , UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIGestureRecognizerDelegate {
     
     @IBOutlet weak var othersAckButton: UIButton!
+    @IBOutlet var collectionView: UICollectionView!
     
     @IBAction func tapOtherAckButton(_ sender: Any) {
         guard let url = URL(string: "https://github.com/ZonD80/duppy/graphs/contributors") else { return }
@@ -24,88 +25,77 @@ class ViewController: UIViewController , UITableViewDataSource , UITableViewDele
         NSLog(text);
     }
     
-    
-    func task(launchPath: String, arguments: String...) -> NSString {
-        let task = NSTask.init()
-        task?.setLaunchPath(launchPath)
-        task?.arguments = arguments
-        
-        // Create a Pipe and make the task
-        // put all the output there
-        let pipe = Pipe()
-        task?.standardOutput = pipe
-        
-        // Launch the task
-        task?.launch()
-        task?.waitUntilExit()
-        
-        // Get the data
-        let data = pipe.fileHandleForReading.readDataToEndOfFile()
-        let output = NSString(data: data, encoding: String.Encoding.utf8.rawValue)
-        
-        return output!
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
     }
     
-    let localPathURL = FileManager.default.temporaryDirectory;
-    var isAppCloningNow: Bool = false;
-    let selfAppPath = Bundle.main.bundlePath;
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return appModel.count;
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return appModel.count
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        var cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier")
-        if cell == nil {
-            cell = UITableViewCell(style: .value2, reuseIdentifier: "reuseIdentifier")
-        }
-        let text1:String!
-        let text2:String!
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! MyCollectionViewCell
+                
         
         if (appModel[indexPath.row].isDRM!) {
             if (!FileManager.default.fileExists(atPath: "/var/mobile/Documents/CrackerXI/"+appModel[indexPath.row].mainBundleExecutable!)) {
-                text1 = "⚠️ \(appModel[indexPath.row].mainBundleName! as String)"
-                text2 = "DRM-protected."
+                cell.appStatus.text = "⚠️\nDRM-protected."
             } else {
-                text1 = "✅ \(appModel[indexPath.row].mainBundleName! as String)"
-                text2 = "DRM-protected."
+                cell.appStatus.text = "✅\nDRM-protected."
             }
         } else {
-            text1 = "✅ \(appModel[indexPath.row].mainBundleName! as String)"
-            text2 = "Not DRM-protected."
+            cell.appStatus.text = "✅\nNot DRM-protected."
         }
         
-        cell?.textLabel?.text = text1
-        cell?.detailTextLabel?.text = text2
+        cell.appIcon.kf.setImage(with: URL(fileURLWithPath: appModel[indexPath.row].icon!), placeholder: UIImage(named: "icon.png"))
+        cell.appName.text = appModel[indexPath.row].mainBundleName! as String
+        
         if (appModel[indexPath.row].icon == "noicon") {
-            cell?.imageView?.kf.setImage(with: URL(fileURLWithPath: "/System/Library/PrivateFrameworks/MobileIcons.framework/DefaultIcon-60@2x~iphone.png"), placeholder: UIImage(named: "icon.png"))
+            switch UIDevice.current.userInterfaceIdiom {
+            case .phone:
+                cell.appIcon.kf.setImage(with: URL(fileURLWithPath:
+                "/System/Library/PrivateFrameworks/MobileIcons.framework/DefaultIcon-60@2x~iphone.png"), placeholder: UIImage(named: "icon.png"))
+            case .pad:
+                cell.appIcon.kf.setImage(with: URL(fileURLWithPath:
+                "/System/Library/PrivateFrameworks/MobileIcons.framework/DefaultIcon-76@2x~ipad.png"), placeholder: UIImage(named: "icon.png"))
+            case .tv:
+                cell.appIcon.image = nil
+            case .carPlay:
+                cell.appIcon.image = nil
+            case .unspecified:
+                cell.appIcon.image = nil
+            @unknown default:
+                cell.appIcon.image = nil
+            }
         }
         else {
-            cell?.imageView?.kf.setImage(with: URL(fileURLWithPath: appModel[indexPath.row].icon!), placeholder: UIImage(named: "icon.png"))
+            cell.appIcon.kf.setImage(with: URL(fileURLWithPath: appModel[indexPath.row].icon!), placeholder: UIImage(named: "icon.png"))
         }
-        cell?.imageView?.layer.cornerRadius = 10
-        cell?.imageView?.clipsToBounds = true
-        return cell!
+        
+        cell.appIcon.layer.cornerRadius = 10
+        cell.appIcon.clipsToBounds = true
+        return cell
     }
     
-    func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
-        let fm = FileManager.default
-        let size = fm.directorySize(URL(fileURLWithPath: appModel[indexPath.row].path!))
-        var refreshAlert: UIAlertController;
-        refreshAlert = UIAlertController(title: "\(appModel[indexPath.row].mainBundleName! as String)", message: "Version: \(appModel[indexPath.row].mainBundleVersion! as String)\nSize: \(humanReadableByteCount(bytes: size!))\nID: \(appModel[indexPath.row].mainBundleId! as String)", preferredStyle: UIAlertController.Style.alert)
-        
-        refreshAlert.addAction(UIAlertAction(title: "Close", style: .cancel, handler: { (action: UIAlertAction!) in
-        }))
-        present(refreshAlert, animated: true, completion: nil)
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        collectionView.deselectItem(at: indexPath, animated: true)
         
     }
     
-    func humanReadableByteCount(bytes: Int) -> String {
-        if (bytes < 1000) { return "\(bytes) B" }
-        let exp = Int(log2(Double(bytes)) / log2(1000.0))
-        let unit = ["KB", "MB", "GB", "TB", "PB", "EB"][exp - 1]
-        let number = Double(bytes) / pow(1000, Double(exp))
-        return String(format: "%.1f %@", number, unit)
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "AppInfo" {
+            guard let appInfoController = segue.destination as? AppInfoViewController else { return }
+            guard let cell = sender as? UICollectionViewCell else { return }
+            guard let indexPath = collectionView.indexPath(for: cell) else { return }
+            
+            let appObject = app(name: appModel[indexPath.row].name!, icon: appModel[indexPath.row].icon!, path: appModel[indexPath.row].path!, mainBundleId: appModel[indexPath.row].mainBundleId!, mainBundleName: appModel[indexPath.row].mainBundleName!, isDRM:appModel[indexPath.row].isDRM! ,mainBundleExecutable: appModel[indexPath.row].mainBundleExecutable!, mainBundleVersion: appModel[indexPath.row].mainBundleVersion!, trackId: appModel[indexPath.row].trackId!);
+            
+            appInfoController.appModel.append(appObject)
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: 128, height: 128)
     }
     
     func setStatusText(text: String) {
@@ -113,321 +103,11 @@ class ViewController: UIViewController , UITableViewDataSource , UITableViewDele
             self.statusText.text = text;
         }
     }
-    
-    func cloneApp(app: app, separateBinary:Bool = false) {
         
-        self.isAppCloningNow = true;
-        
-        self.setStatusText(text: "Starting to clone");
-        
-        let localPath = localPathURL.absoluteString.replacingOccurrences(of: "file://", with: "")
-        
-        let archiverQueue = DispatchQueue(label: "archiver")
-        archiverQueue.async {
-            
-            let appName = app.name! as String;
-            let appPath = app.path! as String;
-            self.log("cloning \(appName) at path \(appPath)")
-            self.log("clearing temp dir: "+localPath+"/work_dir/Payload")
-            
-            do {
-                try FileManager.default.removeItem(atPath: localPath+"/work_dir/Payload")
-            } catch {
-                self.log("unable to remove temp dir \(error) we can give up on it");
-                //self.isAppCloningNow = false;
-                //self.setStatusText(text: "ERROR: unable to remove temp dir")
-                //return;
-            }
-            do {
-                try FileManager.default.createDirectory(atPath: localPath+"/work_dir/Payload", withIntermediateDirectories: true, attributes: nil)
-            } catch {
-                self.log("unable to create temp dir \(error)");
-                self.isAppCloningNow = false;
-                self.setStatusText(text: "ERROR: unable to create temp dir \(localPath)/work_dir/Payload")
-                return;
-            
-            }
-            
-            self.log("Copying app data")
-            
-            self.setStatusText(text: "Copying original app data");
-            
-            do { try FileManager.default.copyItem(at: URL(string: "file://"+appPath.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed)!)!, to: URL(string: "file://"+localPath+"/work_dir/Payload/\(appName)".addingPercentEncoding(withAllowedCharacters: .urlPathAllowed)!)!)
-            }
-            catch {
-                self.log("unable to copy dir \(error)");
-                self.setStatusText(text: "ERROR: unable to copy original app data")
-                self.isAppCloningNow = false;
-                return;
-            }
-            
-            if separateBinary {
-                do {
-                    self.log("using separate binary!");
-                    let destinationBinaryURL = URL(string: "file://"+localPath+"/work_dir/Payload/\(appName)/"+app.mainBundleExecutable!.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed)!);
-                    try FileManager.default.removeItem(at: destinationBinaryURL!);
-                    try FileManager.default.copyItem(at: URL(string: "file:///var/mobile/Documents/CrackerXI/"+app.mainBundleExecutable!.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed)!)!, to: destinationBinaryURL!)
-                }
-                catch {
-                    self.log("unable to copy separate binary \(error)");
-                    self.setStatusText(text: "ERROR: unable to copy separate binary")
-                    self.isAppCloningNow = false;
-                    return;
-                }
-            }
-            
-            self.log("App data copied")
-            
-            do { // removing SC_info, as it is not under FairPlay
-                try FileManager.default.removeItem(at: URL(string: "file://"+localPath+"/work_dir/Payload/\(appName)/SC_Info")!);
-            }
-            catch {
-                self.log("unable to remove SC_Info dir \(error), but we can give up");
-            }
-            
-            self.setStatusText(text: "Making some magic");
-            
-            self.log("Searching for PLISTS and converting them to XML formats")
-            
-            let url = URL(fileURLWithPath: localPath+"/work_dir/Payload")
-            
-            let mainInfoPlistURL = URL(fileURLWithPath: localPath+"/work_dir/Payload/\(appName)/Info.plist");
-            
-            var newBundleId:String="";
-            
-            do {
-                let mainInfoPlistEntitiesDict = try PropertyListSerialization.propertyList(from: Data(contentsOf: mainInfoPlistURL), options: [], format: nil) as! NSDictionary
-                let mainInfoPlistEntities:NSMutableDictionary = mainInfoPlistEntitiesDict.mutableCopy() as! NSMutableDictionary
-                
-                let mainBundleId = mainInfoPlistEntities["CFBundleIdentifier"] as! String
-                self.log("Main bundle id is \(mainBundleId)")
-                
-                newBundleId = "duppy."+self.randomString(length: 5)+"."+mainBundleId;
-                
-                self.log("Replacement bundle id is \(newBundleId)")
-                
-                mainInfoPlistEntities["CFBundleDisplayName"] = app.mainBundleName;
-                
-                do { try mainInfoPlistEntities.write(to: mainInfoPlistURL);
-                    
-                }
-                catch {
-                    self.log("unable to write to info plist")
-                    self.setStatusText(text: "Unable to write to Info.plist")
-                    return;
-                }
-                
-                var plistEntities: [String:NSDictionary] = [:];
-                
-                if let enumerator = FileManager.default.enumerator(at: url, includingPropertiesForKeys: [], options: []) {
-                    for case let fileURL as URL in enumerator {
-                        do {
-                            let fileAttributes = try fileURL.resourceValues(forKeys:[.isRegularFileKey])
-                            if fileAttributes.isRegularFile! {
-                                if fileURL.absoluteString.hasSuffix("Info.plist") {
-                                    let plistData = try Data(contentsOf: fileURL);
-                                    
-                                    do {
-                                        plistEntities[fileURL.absoluteString] = try PropertyListSerialization.propertyList(from: plistData, options: [], format: nil) as? NSDictionary
-                                        
-                                        //print (InfoPlistEntities);
-                                        var executableName:String = "";
-                                        if plistEntities[fileURL.absoluteString]!["CFBundleExecutable"] != nil {
-                                            executableName = plistEntities[fileURL.absoluteString]!["CFBundleExecutable"] as! String
-                                            self.log("found executable \(executableName) in plist at location \(fileURL.absoluteString), changing entitlements")
-                                            let executablePath = fileURL.absoluteString.replacingOccurrences(of: "Info.plist", with: executableName).replacingOccurrences(of: "file://", with: "")
-                                            //print ("command: /usr/bin/ldid -e '\(executablePath)'")
-                                            let existingEntitlements = self.task(launchPath: "/usr/bin/ldid",arguments: "-e",executablePath);
-                                            self.log("existing entitlements are: \(existingEntitlements)");
-                                            
-                                            if (existingEntitlements.contains(mainBundleId)) {
-                                                var fixedEntitlements = existingEntitlements.replacingOccurrences(of: mainBundleId, with: newBundleId)
-                                                self.log("FIXED entitlements are: \(fixedEntitlements)");
-                                                try fixedEntitlements.write(toFile: localPath+"/work_dir/Entitlements.xml", atomically: true, encoding: .utf8)
-                                                let entitlementWriteResult = self.task(launchPath: "/usr/bin/ldid",arguments: "-S"+localPath+"/work_dir/Entitlements.xml",executablePath);
-                                                self.log("entitlement write result: \(entitlementWriteResult)");
-                                            }
-                                            //print ("/usr/bin/ldid -K"+self.selfAppPath+"/Certificates.p12 "+executablePath);
-                                            //let signResult = self.task(launchPath: "/usr/bin/ldid",arguments: "-K"+self.selfAppPath+"/Certificates.p12",executablePath);
-                                            //print ("sign result: \(signResult)");
-                                        } else {
-                                            self.log("no executables in plist at location \(fileURL.absoluteString)")
-                                        }
-                                        
-                                    } catch {
-                                        self.log("error, unable to parse Info.plist");
-                                    }
-                                    let plist = PlistConverter(binaryData: plistData);
-                                    
-                                    let plistXML = plist?.convertToXML();
-                                    
-                                    
-                                    let fixedXML = plistXML?.replacingOccurrences(of: mainBundleId, with: newBundleId)
-                                    
-                                    try fixedXML?.write(to: fileURL, atomically: true, encoding: .utf8);
-                                }
-                            }
-                        } catch { self.log("\(error), \(fileURL)"); self.isAppCloningNow = false; }
-                    }
-                    //self.log(files)
-                }
-            } catch {
-                self.log("Error parsing main Info.plist \(error)")
-                self.setStatusText(text: "ERROR: unable to parse Info.plist")
-                self.isAppCloningNow = false;
-                return;
-            }
-            
-            self.log("modified plists written zipping")
-            do {
-                let filePath = URL(string: localPath+"/work_dir/Payload")
-                
-                let zipFilePath = self.localPathURL.appendingPathComponent("archive.ipa")
-                try Zip.zipFiles(paths: [filePath! as URL], zipFilePath: zipFilePath, password: nil, progress: { (progress) -> () in
-                    self.log("\(progress)");
-                    let percents = round(progress*100*100)/100;
-                    self.setStatusText(text: "Archiving "+percents.description+"%");
-                }) //Zip
-                
-                self.log("zipped!");
-                
-                
-                
-                // clearance
-                do {
-                    try FileManager.default.removeItem(atPath: localPath+"/work_dir/Payload")
-                    
-                } catch {
-                    self.log("unable to remove temp dir \(error) we can give up on it");
-                    //self.isAppCloningNow = false;
-                    //self.setStatusText(text: "ERROR: unable to remove temp dir")
-                    //return;
-                }
-                
-                if separateBinary {
-                    do {
-                        try FileManager.default.removeItem(at: URL(string: "file:///var/mobile/Documents/CrackerXI/"+app.mainBundleExecutable!.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed)!)!)
-                    }catch {
-                        self.log("unable to remove separate binary we can give up on it \(error)");
-                        //self.isAppCloningNow = false;
-                        //self.setStatusText(text: "ERROR: unable to remove temp dir")
-                        //return;
-                    }
-                }
-                
-                
-                
-                self.setStatusText(text: "Requesting installation");
-                
-                
-                DispatchQueue.main.async {
-                    let appInstallUrl = "itms-services://?action=download-manifest&url=https%3A%2F%2Fduppy.app%2Fdownload.php%3Fname%3D"+newBundleId;
-                    
-                    self.log("app install URL is \(appInstallUrl)")
-                    if let url = URL(string:appInstallUrl) {
-                        UIApplication.shared.open(url)
-                    }
-                }
-                self.setStatusText(text: "Duppied!\nDon't close this app until duplicate is installed");
-                self.isAppCloningNow = false;
-            }
-            catch {
-                self.log("Something went wrong")
-                self.isAppCloningNow = false;
-                self.setStatusText(text: "ERROR: something went wrong")
-                return
-            }
-        }
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-        tableView.deselectRow(at: indexPath, animated: true)
-        
-        let appName = appModel[indexPath.row].mainBundleName! as String
-        self.log("selected \(appName)")
-        
-        var refreshAlert: UIAlertController;
-        
-        if self.isAppCloningNow == true {
-            refreshAlert = UIAlertController(title: "Not now", message: "Another app cloning is in progress", preferredStyle: UIAlertController.Style.alert)
-            
-            refreshAlert.addAction(UIAlertAction(title: "Okay", style: .cancel, handler: { (action: UIAlertAction!) in
-                self.log("Handle Cancel Logic here")
-            }))
-        } else {
-            
-            if appModel[indexPath.row].isDRM! {
-                
-                if (!FileManager.default.fileExists(atPath: "/var/mobile/Documents/CrackerXI/"+appModel[indexPath.row].mainBundleExecutable!)) {
-                    
-                    
-                    refreshAlert = UIAlertController(title: "DRM-protected", message: "This app is iTunes DRM protected and no decrypted binary found in CrackerXI folder\nDump app binary (select \"YES, binary only\") with CrackerXI from https://cydia.iphonecake.com/ to clone this app", preferredStyle: UIAlertController.Style.alert)
-                    
-                    refreshAlert.addAction(UIAlertAction(title: "Okay", style: .cancel, handler: { (action: UIAlertAction!) in
-                        self.log("Handle Cancel Logic here")
-                    }))
-                    
-                    if appModel[indexPath.row].trackId != "" {
-                    refreshAlert.addAction(UIAlertAction(title: "Get DRM-free from appdb", style: .default, handler: { (action: UIAlertAction!) in
-                        
-                        let redirectURL = "https://appdb.to/view.php?trackid="+self.appModel[indexPath.row].trackId!+"&type=ios";
-                        self.log("redirecting to appdb to \(redirectURL)")
-                        guard let url = URL(string: redirectURL) else { return }
-                        UIApplication.shared.open(url)
-                    }))
-                    }
-                } else {
-                    refreshAlert = UIAlertController(title: "Clone \(appName) with DRM-free binary", message: "Please enter desired app name or leave blank to use original one. Don't worry, we will clear DRM-free binary once finished", preferredStyle: UIAlertController.Style.alert)
-                    
-                    refreshAlert.addTextField(configurationHandler: {(textField: UITextField!) in
-                        textField.placeholder = self.appModel[indexPath.row].mainBundleName! as String
-                    })
-                    
-                    refreshAlert.addAction(UIAlertAction(title: "Clone", style: .default, handler: { (action: UIAlertAction!) in
-                        let newBundleName = refreshAlert.textFields![0];
-                        if newBundleName.text != "" {
-                            self.appModel[indexPath.row].mainBundleName = newBundleName.text
-                        }
-                        self.cloneApp(app: self.appModel[indexPath.row],separateBinary:true)
-                    }))
-                    
-                    refreshAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action: UIAlertAction!) in
-                        self.log("Handle Cancel Logic here")
-                    }))
-                }
-            } else {
-                refreshAlert = UIAlertController(title: "Clone \(appName)", message: "Please enter desired app name or leave blank to use original one", preferredStyle: UIAlertController.Style.alert)
-                
-                refreshAlert.addTextField(configurationHandler: {(textField: UITextField!) in
-                    textField.placeholder = self.appModel[indexPath.row].mainBundleName! as String
-                })
-                
-                refreshAlert.addAction(UIAlertAction(title: "Clone", style: .default, handler: { (action: UIAlertAction!) in
-                    let newBundleName = refreshAlert.textFields![0];
-                    if newBundleName.text != "" {
-                        self.appModel[indexPath.row].mainBundleName = newBundleName.text
-                    }
-                    self.cloneApp(app: self.appModel[indexPath.row],separateBinary:false)
-                }))
-                
-                refreshAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action: UIAlertAction!) in
-                    self.log("Handle Cancel Logic here")
-                }))
-            }
-        }
-        
-        present(refreshAlert, animated: true, completion: nil)
-    }
-    @IBOutlet weak var appsTableView: UITableView!
-    
     @IBOutlet weak var statusText: UILabel!
     
-    func randomString(length: Int) -> String {
-        let letters = "abcdefghijklmnopqrstuvwxyz0123456789"
-        return String((0..<length).map{ _ in letters.randomElement()! })
-    }
-    
+    let selfAppPath = Bundle.main.bundlePath;
+    let localPathURL = FileManager.default.temporaryDirectory;
     let appsPath = "/var/containers/Bundle/Application";
     var apps: [String: String] = [:];
     
@@ -535,9 +215,6 @@ class ViewController: UIViewController , UITableViewDataSource , UITableViewDele
                 }
             }
             
-            appsTableView.dataSource = self;
-            appsTableView.delegate = self;
-            
             let localPath = localPathURL.absoluteString.replacingOccurrences(of: "file://", with: "")
             
             self.log("local path is \(localPath)");
@@ -565,37 +242,37 @@ class ViewController: UIViewController , UITableViewDataSource , UITableViewDele
             self.log("unable to get app dirs \(error)");
             self.setStatusText(text: "Looks like your device is not jailbroken")
         }
+        view.backgroundColor = .backgroundColor
+        collectionView.backgroundColor = .backgroundColor
         
+        let layout = UICollectionViewFlowLayout()
+        collectionView.collectionViewLayout = layout
+        layout.itemSize = CGSize(width: 128, height: 128)
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        
+        let longPressGR = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(longPressGR:)))
+        longPressGR.minimumPressDuration = 0.5
+        longPressGR.delaysTouchesBegan = true
+        self.collectionView.addGestureRecognizer(longPressGR)
     }
     
     
-}
-
-extension URL {
-    var fileSize: Int? { // in bytes
-        do {
-            let val = try self.resourceValues(forKeys: [.totalFileAllocatedSizeKey, .fileAllocatedSizeKey])
-            return val.totalFileAllocatedSize ?? val.fileAllocatedSize
-        } catch {
-            print(error)
-            return nil
+    @objc
+    func handleLongPress(longPressGR: UILongPressGestureRecognizer) {
+        if longPressGR.state != .ended {
+            return
         }
-    }
-}
 
-extension FileManager {
-    func directorySize(_ dir: URL) -> Int? { // in bytes
-        if let enumerator = self.enumerator(at: dir, includingPropertiesForKeys: [], options: [], errorHandler: { (_, error) -> Bool in
-            print(error)
-            return false
-        }) {
-            var bytes = 0
-            for case let url as URL in enumerator {
-                bytes += url.fileSize ?? 0
-            }
-            return bytes
+        let point = longPressGR.location(in: self.collectionView)
+        let indexPath = self.collectionView.indexPathForItem(at: point)
+
+        if let indexPath = indexPath {
+            var cell = self.collectionView.cellForItem(at: indexPath)
+            print(indexPath.row)
         } else {
-            return nil
+            print("Could not find index path")
         }
     }
+    
 }

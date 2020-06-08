@@ -25,6 +25,9 @@
 		88E5FBCA248AAEC6008B8E7A /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88E5FBC9248AAEC6008B8E7A /* WebKit.framework */; };
 		9E1CBA072488CFFB009CE8A7 /* Kingfisher.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E1CBA062488CFFB009CE8A7 /* Kingfisher.framework */; };
 		9E1CBA082488D007009CE8A7 /* Kingfisher.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9E1CBA062488CFFB009CE8A7 /* Kingfisher.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		9E8390B4248E0BC900B44FC1 /* AppInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E8390B1248E0BC900B44FC1 /* AppInfoViewController.swift */; };
+		9E8390B6248E0BC900B44FC1 /* MyCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E8390B3248E0BC900B44FC1 /* MyCollectionViewCell.swift */; };
+		9E8390B8248E0BF200B44FC1 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E8390B7248E0BF200B44FC1 /* Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -63,6 +66,9 @@
 		88D4A5E12479952D00469190 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		88E5FBC9248AAEC6008B8E7A /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		9E1CBA062488CFFB009CE8A7 /* Kingfisher.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Kingfisher.framework; path = Carthage/Build/iOS/Kingfisher.framework; sourceTree = "<group>"; };
+		9E8390B1248E0BC900B44FC1 /* AppInfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppInfoViewController.swift; sourceTree = "<group>"; };
+		9E8390B3248E0BC900B44FC1 /* MyCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyCollectionViewCell.swift; sourceTree = "<group>"; };
+		9E8390B7248E0BF200B44FC1 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,6 +111,9 @@
 		88D4A5B024793F7700469190 /* duppy2 */ = {
 			isa = PBXGroup;
 			children = (
+				9E8390B7248E0BF200B44FC1 /* Extensions.swift */,
+				9E8390B1248E0BC900B44FC1 /* AppInfoViewController.swift */,
+				9E8390B3248E0BC900B44FC1 /* MyCollectionViewCell.swift */,
 				88D4A5B124793F7700469190 /* AppDelegate.swift */,
 				88D4A5B524793F7700469190 /* ViewController.swift */,
 				88D4A5B724793F7700469190 /* Main.storyboard */,
@@ -226,6 +235,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9E8390B6248E0BC900B44FC1 /* MyCollectionViewCell.swift in Sources */,
+				9E8390B4248E0BC900B44FC1 /* AppInfoViewController.swift in Sources */,
+				9E8390B8248E0BF200B44FC1 /* Extensions.swift in Sources */,
 				88D4A5D024794C7A00469190 /* appClass.swift in Sources */,
 				88D4A5CE247940AF00469190 /* PlistConverter.swift in Sources */,
 				88D4A5B624793F7700469190 /* ViewController.swift in Sources */,
