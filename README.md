@@ -54,6 +54,5 @@ I personally feel fine with existing features, but this is what you can improve 
 
 * Find a way to integrate [frida-ios-dump](https://github.com/AloneMonkey/frida-ios-dump) or any other binary dumper
 * Make webserver that is used for itms-services run when app is minimised
-* Make interface more fancy
 * Allow to update duplicated app by specifying alongside bundle ID manually
 * Make free space checks (at least 2x space of size original uncompressed app folder should be available (copy of App folder, App archive))
