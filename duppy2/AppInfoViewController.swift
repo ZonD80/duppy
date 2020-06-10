@@ -12,13 +12,13 @@ import Kingfisher
 
 class AppInfoViewController: UIViewController {
 
-    @IBOutlet var appName: UILabel!
     @IBOutlet var appIcon: UIImageView!
     @IBOutlet var appVersion: UILabel!
     @IBOutlet var appSize: UILabel!
     @IBOutlet var appID: UILabel!
     @IBOutlet weak var statusText: UILabel!
     @IBOutlet weak var closeView: UIButton!
+    @IBOutlet weak var navBar: UINavigationBar!
     
     
     var appModel = [app]()
@@ -61,11 +61,20 @@ class AppInfoViewController: UIViewController {
     
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
-        let location = view.frame.height - (view.frame.height/2/2)
-        let location2 = location/2 - location
-        let location3 = view.frame.height + location2
-        let center = CGPoint(x: view.center.x, y: location3)
-        //let center = CGPoint(x: view.center.x, y: view.frame.height-300) //view.center
+        var center:CGPoint!
+        
+        if (UIScreen.main.bounds.size.height <= 667) {
+            let location = view.frame.height - (view.frame.height/3)
+            let location2 = location/2 - location
+            let location3 = view.frame.height + location2
+            center = CGPoint(x: view.center.x, y: location3)
+        }
+        else {
+            let location = view.frame.height - (view.frame.height/2/2)
+            let location2 = location/2 - location
+            let location3 = view.frame.height + location2
+            center = CGPoint(x: view.center.x, y: location3)
+        }
         pulsatingLayer.position = center
         trackLayer.position = center
         shapeLayer.position = center
@@ -76,8 +85,10 @@ class AppInfoViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .backgroundColor
         // Do any additional setup after loading the view.
-        appName.text = appModel[0].mainBundleName!
+        navBar.topItem?.title = appModel[0].mainBundleName!
         appVersion.text = appModel[0].mainBundleVersion!
+        appID.adjustsFontSizeToFitWidth = true
+        appID.minimumScaleFactor = 0.5
         appID.text = appModel[0].mainBundleId!
         if (appModel[0].icon == "noicon") {
             switch UIDevice.current.userInterfaceIdiom {

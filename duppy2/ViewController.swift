@@ -37,6 +37,11 @@ class ViewController: UIViewController , UICollectionViewDelegate, UICollectionV
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! MyCollectionViewCell
                 
         
+        cell.appName.adjustsFontSizeToFitWidth = true
+        cell.appName.minimumScaleFactor = 0.5
+        cell.appStatus.adjustsFontSizeToFitWidth = true
+        cell.appStatus.minimumScaleFactor = 0.5
+        
         if (appModel[indexPath.row].isDRM!) {
             if (!FileManager.default.fileExists(atPath: "/var/mobile/Documents/CrackerXI/"+appModel[indexPath.row].mainBundleExecutable!)) {
                 cell.appStatus.text = "⚠️\nDRM-protected."
@@ -94,8 +99,38 @@ class ViewController: UIViewController , UICollectionViewDelegate, UICollectionV
         }
     }
     
+//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+//        return CGSize(width: 128, height: 128)
+//    }
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 128, height: 128)
+
+        var noOfCellsInRow = 0
+        
+        switch UIDevice.current.userInterfaceIdiom {
+        case .phone:
+            noOfCellsInRow = 4
+        case .pad:
+            noOfCellsInRow = 6
+        case .tv:
+            noOfCellsInRow = 0
+        case .carPlay:
+            noOfCellsInRow = 0
+        case .unspecified:
+            noOfCellsInRow = 0
+        @unknown default:
+            noOfCellsInRow = 0
+        }
+
+        let flowLayout = collectionViewLayout as! UICollectionViewFlowLayout
+
+        let totalSpace = flowLayout.sectionInset.left
+            + flowLayout.sectionInset.right
+            + (flowLayout.minimumInteritemSpacing * CGFloat(noOfCellsInRow - 1))
+
+        let size = Int((collectionView.bounds.width - totalSpace) / CGFloat(noOfCellsInRow))
+
+        return CGSize(width: size, height: 113)
     }
     
     func setStatusText(text: String) {
