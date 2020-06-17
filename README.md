@@ -39,7 +39,7 @@ Make sure you have [Carthage](https://github.com/Carthage/Carthage) ,**ldid**, a
 Run the following commands:
 ```
 $ git clone https://github.com/ZonD80/duppy.git
-$ cd duppy2/
+$ cd duppy/
 $ carthage update --platform iOS
 $ open duppy2.xcodeproj
 ```
