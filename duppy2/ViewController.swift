@@ -21,8 +21,42 @@ class ViewController: UIViewController , UICollectionViewDelegate, UICollectionV
         UIApplication.shared.open(url)
     }
     func log(_ text:String) {
-        //print(text);
+        print("[Duppy] "+text);
         NSLog(text);
+    }
+    
+    func task(launchPath: String, arguments: String...) -> NSString {
+        let task = NSTask.init()
+        
+        if (launchPath=="/bin/ls") {
+        
+        // do nothing
+            
+        } else {
+            let programExists = self.task(launchPath: "/bin/ls", arguments: launchPath)
+                
+            if (programExists=="") {
+                return ""; // there is no such program
+            }
+        }
+        task?.setLaunchPath(launchPath)
+        task?.arguments = arguments
+        
+        // Create a Pipe and make the task
+        // put all the output there
+        let pipe = Pipe()
+        task?.standardOutput = pipe
+        
+        // Launch the task
+        
+        task?.launch()
+        task?.waitUntilExit()
+        
+        // Get the data
+        let data = pipe.fileHandleForReading.readDataToEndOfFile()
+        let output = NSString(data: data, encoding: String.Encoding.utf8.rawValue)
+        
+        return output!
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -157,6 +191,12 @@ class ViewController: UIViewController , UICollectionViewDelegate, UICollectionV
         self.log("app path is \(self.selfAppPath)")
         self.log("documents path URL is \(self.localPathURL)");
         
+        let perlTestResult = self.task(launchPath: "/usr/bin/perl",arguments: "-v");
+            
+            if (!perlTestResult.contains("This is perl")) {
+                self.log("looks like there is no perl on device");
+                self.setStatusText(text: "Looks there is no perl.\nPlease install perl from Cydia")
+            } else {
         
         do {
             let appDirs = try FileManager.default.contentsOfDirectory(atPath: self.appsPath)
@@ -244,6 +284,7 @@ class ViewController: UIViewController , UICollectionViewDelegate, UICollectionV
                         }
                     }
                     statusText.text = "Apps loaded\nTap on app to clone it";
+                    
                 }
                 catch {
                     self.log("unable to get contents of app dir \(error)");
@@ -277,6 +318,9 @@ class ViewController: UIViewController , UICollectionViewDelegate, UICollectionV
             self.log("unable to get app dirs \(error)");
             self.setStatusText(text: "Looks like your device is not jailbroken")
         }
+            }
+        
+        
         view.backgroundColor = .backgroundColor
         collectionView.backgroundColor = .backgroundColor
         

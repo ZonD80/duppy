@@ -314,7 +314,7 @@ class AppInfoViewController: UIViewController {
     let selfAppPath = Bundle.main.bundlePath;
 
     func log(_ text:String) {
-        //print(text);
+        print("[Duppy] "+text);
         NSLog(text);
     }
     
@@ -417,7 +417,7 @@ class AppInfoViewController: UIViewController {
                 let mainBundleId = mainInfoPlistEntities["CFBundleIdentifier"] as! String
                 self.log("Main bundle id is \(mainBundleId)")
                 
-                newBundleId = "duppy."+self.randomString(length: 5)+"."+mainBundleId;
+                newBundleId = "duppy."+self.randomString(length: mainBundleId.count-6); // make sure that new bundle ID has the same length
                 
                 self.log("Replacement bundle id is \(newBundleId)")
                 
@@ -463,9 +463,9 @@ class AppInfoViewController: UIViewController {
                                                 let entitlementWriteResult = self.task(launchPath: "/usr/bin/ldid",arguments: "-S"+localPath+"/work_dir/Entitlements.xml",executablePath);
                                                 self.log("entitlement write result: \(entitlementWriteResult)");
                                             }
-                                            //print ("/usr/bin/ldid -K"+self.selfAppPath+"/Certificates.p12 "+executablePath);
-                                            //let signResult = self.task(launchPath: "/usr/bin/ldid",arguments: "-K"+self.selfAppPath+"/Certificates.p12",executablePath);
-                                            //print ("sign result: \(signResult)");
+                                            let appGroupPatchResult = self.task(launchPath: "/usr/bin/perl", arguments: "-pi","-e", "s/"+mainBundleId+"/"+newBundleId+"/g",executablePath);
+                                            self.log("binary patch result: \(appGroupPatchResult)");
+
                                         } else {
                                             self.log("no executables in plist at location \(fileURL.absoluteString)")
                                         }

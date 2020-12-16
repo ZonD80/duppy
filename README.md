@@ -10,7 +10,7 @@
   <img src="https://img.shields.io/github/issues/ZonD80/duppy"/>
 </p>
 
-This app is designed to "clone" iOS apps on **jailbroken** devices with [AppSync](https://cydia.akemi.ai/?page/net.angelxwind.appsyncunified) installed.
+This app is designed to "clone" iOS apps on **jailbroken** devices with [AppSync](https://cydia.akemi.ai/?page/net.angelxwind.appsyncunified) installed. Compatible with iOS 11+
 It works like this:
 
 1. Copying original app contents.
