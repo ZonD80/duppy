@@ -191,9 +191,9 @@ class ViewController: UIViewController , UICollectionViewDelegate, UICollectionV
         self.log("app path is \(self.selfAppPath)")
         self.log("documents path URL is \(self.localPathURL)");
         
-        let perlTestResult = self.task(launchPath: "/usr/bin/perl",arguments: "-v");
+        //let perlTestResult = self.task(launchPath: "/usr/bin/perl",arguments: "-v");
             
-            if (!perlTestResult.contains("This is perl")) {
+            if (false/*!perlTestResult.contains("This is perl")*/) {
                 self.log("looks like there is no perl on device");
                 self.setStatusText(text: "Looks there is no perl.\nPlease install perl from Cydia")
             } else {

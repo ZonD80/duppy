@@ -417,7 +417,8 @@ class AppInfoViewController: UIViewController {
                 let mainBundleId = mainInfoPlistEntities["CFBundleIdentifier"] as! String
                 self.log("Main bundle id is \(mainBundleId)")
                 
-                newBundleId = "duppy."+self.randomString(length: mainBundleId.count-6); // make sure that new bundle ID has the same length
+                //newBundleId = "duppy."+self.randomString(length: mainBundleId.count-6); // make sure that new bundle ID has the same length
+                newBundleId = mainBundleId+".duppy."+self.randomString(length: 6);
                 
                 self.log("Replacement bundle id is \(newBundleId)")
                 
@@ -463,8 +464,8 @@ class AppInfoViewController: UIViewController {
                                                 let entitlementWriteResult = self.task(launchPath: "/usr/bin/ldid",arguments: "-S"+localPath+"/work_dir/Entitlements.xml",executablePath);
                                                 self.log("entitlement write result: \(entitlementWriteResult)");
                                             }
-                                            let appGroupPatchResult = self.task(launchPath: "/usr/bin/perl", arguments: "-pi","-e", "s/"+mainBundleId+"/"+newBundleId+"/g",executablePath);
-                                            self.log("binary patch result: \(appGroupPatchResult)");
+                                            /*let appGroupPatchResult = self.task(launchPath: "/usr/bin/perl", arguments: "-pi","-e", "s/"+mainBundleId+"/"+newBundleId+"/g",executablePath);
+                                            self.log("binary patch result: \(appGroupPatchResult)");*/
 
                                         } else {
                                             self.log("no executables in plist at location \(fileURL.absoluteString)")
