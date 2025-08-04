@@ -8,5 +8,7 @@
     <string>36YA66W8E9</string>
     <key>application-identifier</key>
     <string>36YA66W8E9.zond80.duppy2</string>
+    <key>get-task-allow</key>
+    <true/>
 </dict>
 </plist>

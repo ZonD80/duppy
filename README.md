@@ -10,7 +10,7 @@
   <img src="https://img.shields.io/github/issues/ZonD80/duppy"/>
 </p>
 
-This app is designed to "clone" iOS apps on **jailbroken** devices with [AppSync](https://cydia.akemi.ai/?page/net.angelxwind.appsyncunified) installed. Compatible with iOS 11+
+This app is designed to "clone" iOS apps on **jailbroken** devices with [AppSync](https://github.com/akemin-dayo/AppSync) installed. Compatible with iOS 12+
 It works like this:
 
 1. Copying original app contents.
@@ -23,10 +23,11 @@ That's it!
 ## Dependencies
 * [swifter](https://github.com/httpswift/swifter) - Tiny http server engine written in Swift programming language
 * [Zip](https://github.com/marmelroy/Zip) - Swift framework for zipping and unzipping files
-* [Kingfisher](https://github.com/onevcat/Kingfisher) - A lightweight, pure-Swift library for downloading and caching images from the web.
+* [Kingfisher](https://github.com/onevcat/Kingfisher) - A lightweight, pure-Swift library for downloading and caching images from the web. 
+* [ldid](https://github.com/ProcursusTeam/ldid) - fork of Saurik's ldid by ProcursusTeam
 
 ## Install
-You can download the latest .ipa from [Duppy.app](https://duppy.app) website by tapping on install link. **Do not use another installers, as they may break IPA**.
+You can download the latest .ipa from [Duppy.bfsc.to](https://duppy.bfsc.to) website by tapping on install link. **Do not use another installers, as they may break IPA**.
 
 ## Download
 You can download the latest .ipa from [here](https://github.com/ZonD80/duppy/releases).
@@ -35,16 +36,16 @@ You can download the latest .ipa from [here](https://github.com/ZonD80/duppy/rel
 
 
 Alernatively, you can build the project manually. 
-Make sure you have [Carthage](https://github.com/Carthage/Carthage) ,**ldid**, are installed, you can install them via [Homebrew](https://github.com/Homebrew)
+Make sure you have [Carthage](https://github.com/Carthage/Carthage) and [appdb build tools](https://github.com/appdb-official/appdb-build-tools)
 Run the following commands:
 ```
 $ git clone https://github.com/ZonD80/duppy.git
 $ cd duppy/
-$ carthage update --platform iOS
+$ carthage update --platform iOS --use-xcframeworks
 $ open duppy2.xcodeproj
 ```
 
-Note that app requires special entitlements that will be added during codesigning! **Overwrites will fail, it is normal**, so during every build just delete and app from device prior to installing.
+Build this app with ```embed.entitlements``` during signature phase.
 
 ## License
 GNU General Public License v3.0. See [LICENSE](LICENSE) file for further information.

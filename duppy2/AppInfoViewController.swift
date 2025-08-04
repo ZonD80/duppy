@@ -36,16 +36,84 @@ class AppInfoViewController: UIViewController {
     }()
     var duplicateCheck:Bool = false
     
+    // Download progress tracking
+    private var isTrackingDownload = false
+    private var downloadFileName: String?
+    
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
     
     private func setupNotificationObservers() {
         NotificationCenter.default.addObserver(self, selector: #selector(handleEnterForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
+        
+        // Download progress notifications
+        NotificationCenter.default.addObserver(self, selector: #selector(handleDownloadProgress(_:)), name: NSNotification.Name("DownloadProgress"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(handleDownloadCompleted(_:)), name: NSNotification.Name("DownloadCompleted"), object: nil)
     }
     
     @objc private func handleEnterForeground() {
         animatePulsatingLayer()
+    }
+    
+    @objc private func handleDownloadProgress(_ notification: Notification) {
+        guard isTrackingDownload,
+              let userInfo = notification.userInfo,
+              let fileName = userInfo["fileName"] as? String,
+              let bytesWritten = userInfo["bytesWritten"] as? Int64,
+              let totalBytes = userInfo["totalBytes"] as? Int64,
+              fileName == downloadFileName else { return }
+        
+        let progress = Double(bytesWritten) / Double(totalBytes)
+        
+        DispatchQueue.main.async {
+            if progress >= 1.0 {
+                self.percentageLabel.text = "Done!"
+                self.setStatusText(text: "Installing now...")
+            } else {
+                let percent = Int(progress * 100)
+                self.percentageLabel.text = "\(percent)%"
+                self.setStatusText(text: "Pushing to device... \(percent)%\nDon't close this app")
+            }
+            
+            self.shapeLayer.strokeEnd = CGFloat(progress)
+        }
+        
+        self.log("Duppy: Download progress for \(fileName): \(bytesWritten)/\(totalBytes) bytes (\(Int(progress * 100))%)")
+    }
+    
+    @objc private func handleDownloadCompleted(_ notification: Notification) {
+        guard isTrackingDownload,
+              let userInfo = notification.userInfo,
+              let fileName = userInfo["fileName"] as? String,
+              fileName == downloadFileName else { return }
+        
+        self.log("Duppy: Device push completed for \(fileName)")
+        
+        DispatchQueue.main.async {
+            self.percentageLabel.text = "DONE!"
+            self.setStatusText(text: "Installing...")
+            self.shapeLayer.strokeEnd = 1.0
+            
+            // Stop tracking after a delay
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                self.isTrackingDownload = false
+                self.downloadFileName = nil
+            }
+        }
+    }
+    
+    private func startDownloadTracking(fileName: String) {
+        isTrackingDownload = true
+        downloadFileName = fileName
+        
+        // Reset progress circle to prepare for download progress
+        DispatchQueue.main.async {
+            self.shapeLayer.strokeEnd = 0
+            self.percentageLabel.text = "0%"
+        }
+        
+        self.log("Duppy: Started tracking download progress for \(fileName)")
     }
     
     private func createCircleShapeLayer(strokeColor: UIColor, fillColor: UIColor) -> CAShapeLayer {
@@ -121,10 +189,33 @@ class AppInfoViewController: UIViewController {
         setupCircleLayers()
         setupPercentageLabel()
         closeView.addTarget(self, action: #selector(buttonAction), for: .touchUpInside)
+        
+        // Add fallback gesture recognizer for emergency close
+        let emergencyCloseGesture = UITapGestureRecognizer(target: self, action: #selector(emergencyClose))
+        emergencyCloseGesture.numberOfTapsRequired = 3
+        closeView.addGestureRecognizer(emergencyCloseGesture)
+        
         view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap)))
     }
     
     @objc func buttonAction(sender: UIButton!) {
+        // Reset state to ensure proper closure
+        self.duplicateCheck = false
+        self.isAppCloningNow = false
+        if #available(iOS 13.0, *) {
+            self.isModalInPresentation = false
+        }
+        self.dismiss(animated: true, completion: nil)
+    }
+    
+    @objc func emergencyClose() {
+        self.log("Duppy: Emergency close triggered (3 taps on close button)")
+        // Force reset all state
+        self.duplicateCheck = false
+        self.isAppCloningNow = false
+        if #available(iOS 13.0, *) {
+            self.isModalInPresentation = false
+        }
         self.dismiss(animated: true, completion: nil)
     }
     
@@ -318,6 +409,34 @@ class AppInfoViewController: UIViewController {
         NSLog(text);
     }
     
+    func findCommandPath(_ commandName: String) -> String? {
+        let fileManager = FileManager.default
+        
+        // Define common base paths for different iOS environments
+        let basePaths = [
+            "/usr/bin",        // Standard iOS location
+            "/var/jb/usr/bin", // Jailbroken device location
+            "/bin",            // Alternative standard location
+            "/var/jb/bin",     // Alternative jailbroken location
+            "/usr/sbin",       // System admin commands
+            "/var/jb/usr/sbin" // Jailbroken system admin commands
+        ]
+        
+        // Check each base path + command combination
+        for basePath in basePaths {
+            let fullPath = "\(basePath)/\(commandName)"
+            if fileManager.fileExists(atPath: fullPath) && fileManager.isExecutableFile(atPath: fullPath) {
+                self.log("Duppy: Found \(commandName) at: \(fullPath)")
+                return fullPath
+            }
+        }
+        
+        self.log("Duppy: Could not find \(commandName) in any of the common locations: \(basePaths.map { "\($0)/\(commandName)" })")
+        return nil
+    }
+    
+
+    
     func setStatusText(text: String) {
         DispatchQueue.main.async {
             self.statusText.text = text;
@@ -358,6 +477,8 @@ class AppInfoViewController: UIViewController {
             } catch {
                 self.log("unable to create temp dir \(error)");
                 self.isAppCloningNow = false;
+                self.duplicateCheck = false
+                self.disableView()
                 self.setStatusText(text: "ERROR: unable to create temp dir \(localPath)/work_dir/Payload")
                 return;
             
@@ -373,6 +494,8 @@ class AppInfoViewController: UIViewController {
                 self.log("unable to copy dir \(error)");
                 self.setStatusText(text: "ERROR: unable to copy original app data")
                 self.isAppCloningNow = false;
+                self.duplicateCheck = false
+                self.disableView()
                 return;
             }
             
@@ -387,6 +510,8 @@ class AppInfoViewController: UIViewController {
                     self.log("unable to copy separate binary \(error)");
                     self.setStatusText(text: "ERROR: unable to copy separate binary")
                     self.isAppCloningNow = false;
+                    self.duplicateCheck = false
+                    self.disableView()
                     return;
                 }
             }
@@ -453,18 +578,18 @@ class AppInfoViewController: UIViewController {
                                             executableName = plistEntities[fileURL.absoluteString]!["CFBundleExecutable"] as! String
                                             self.log("found executable \(executableName) in plist at location \(fileURL.absoluteString), changing entitlements")
                                             let executablePath = fileURL.absoluteString.replacingOccurrences(of: "Info.plist", with: executableName).replacingOccurrences(of: "file://", with: "")
-                                            //print ("command: /usr/bin/ldid -e '\(executablePath)'")
-                                            let existingEntitlements = self.task(launchPath: "/usr/bin/ldid",arguments: "-e",executablePath);
+                                            NSLog("Duppy: executablePath: \(self.selfAppPath)/ldid_iphoneos_arm64)")
+                                            let existingEntitlements = self.task(launchPath: "\(self.selfAppPath)/ldid_iphoneos_arm64",arguments: "-e",executablePath);
                                             self.log("existing entitlements are: \(existingEntitlements)");
                                             
                                             if (existingEntitlements.contains(mainBundleId)) {
                                                 var fixedEntitlements = existingEntitlements.replacingOccurrences(of: mainBundleId, with: newBundleId)
                                                 self.log("FIXED entitlements are: \(fixedEntitlements)");
                                                 try fixedEntitlements.write(toFile: localPath+"/work_dir/Entitlements.xml", atomically: true, encoding: .utf8)
-                                                let entitlementWriteResult = self.task(launchPath: "/usr/bin/ldid",arguments: "-S"+localPath+"/work_dir/Entitlements.xml",executablePath);
+                                                let entitlementWriteResult = self.task(launchPath: "\(self.selfAppPath)/ldid_iphoneos_arm64",arguments: "-S"+localPath+"/work_dir/Entitlements.xml",executablePath);
                                                 self.log("entitlement write result: \(entitlementWriteResult)");
                                             }
-                                            /*let appGroupPatchResult = self.task(launchPath: "/usr/bin/perl", arguments: "-pi","-e", "s/"+mainBundleId+"/"+newBundleId+"/g",executablePath);
+                                            /*let appGroupPatchResult = self.task(launchPath: findCommandPath("perl") ?? "/usr/bin/perl", arguments: "-pi","-e", "s/"+mainBundleId+"/"+newBundleId+"/g",executablePath);
                                             self.log("binary patch result: \(appGroupPatchResult)");*/
 
                                         } else {
@@ -538,7 +663,7 @@ class AppInfoViewController: UIViewController {
                 self.setStatusText(text: "Requesting installation");
                 
                 DispatchQueue.main.async {
-                    let appInstallUrl = "itms-services://?action=download-manifest&url=https%3A%2F%2Fduppy.app%2Fdownload.php%3Fname%3D"+newBundleId;
+                    let appInstallUrl = "itms-services://?action=download-manifest&url=https%3A%2F%2Fduppy.bfsc.to%2Fdownload.php%3Fname%3D"+newBundleId;
                     
                     self.log("app install URL is \(appInstallUrl)")
                     if let url = URL(string:appInstallUrl) {
@@ -547,6 +672,10 @@ class AppInfoViewController: UIViewController {
                 }
                 
                 self.setStatusText(text: "Duppied!\nDon't close this app until duplicate is installed");
+                
+                // Start tracking download progress
+                self.startDownloadTracking(fileName: "archive.ipa")
+                
                 self.isAppCloningNow = false;
                 self.duplicateCheck = false
                 self.disableView()
@@ -554,10 +683,16 @@ class AppInfoViewController: UIViewController {
             catch {
                 self.log("Something went wrong")
                 self.isAppCloningNow = false;
+                self.duplicateCheck = false
+                self.disableView()
                 self.setStatusText(text: "ERROR: something went wrong")
                 return
             }
         }
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
     
 }

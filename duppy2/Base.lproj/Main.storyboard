@@ -108,12 +108,28 @@ Not DRM-protected.</string>
                                     </button>
                                 </subviews>
                             </stackView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BuyCoffeeBtn">
+                                <rect key="frame" x="107" y="870" width="200" height="44"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="200" id="coffee-btn-width"/>
+                                    <constraint firstAttribute="height" constant="44" id="coffee-btn-height"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                <state key="normal" title="☕ Liked it? Buy me a coffee">
+                                    <color key="titleColor" systemColor="systemBlueColor" cocoaTouchSystemColor="systemBlueColor"/>
+                                </state>
+                                <connections>
+                                    <action selector="buyCoffeeButtonTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="coffee-btn-action"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
                             <constraint firstItem="tad-1A-UgP" firstAttribute="top" secondItem="zfI-Ba-dWA" secondAttribute="bottom" constant="8" id="Pir-6p-L1J"/>
                             <constraint firstItem="zfI-Ba-dWA" firstAttribute="top" secondItem="cbU-33-NfM" secondAttribute="bottom" constant="7.5" id="Ryt-Zu-ivL"/>
-                            <constraint firstItem="tad-1A-UgP" firstAttribute="bottom" secondItem="rnm-Zc-jn2" secondAttribute="bottom" id="X4L-bG-NuL"/>
+                            <constraint firstItem="BuyCoffeeBtn" firstAttribute="top" secondItem="tad-1A-UgP" secondAttribute="bottom" constant="8" id="coffee-btn-top"/>
+                            <constraint firstItem="BuyCoffeeBtn" firstAttribute="centerX" secondItem="tad-1A-UgP" secondAttribute="centerX" id="coffee-btn-centerX"/>
+                            <constraint firstItem="BuyCoffeeBtn" firstAttribute="bottom" secondItem="rnm-Zc-jn2" secondAttribute="bottom" id="coffee-btn-bottom"/>
                             <constraint firstItem="zfI-Ba-dWA" firstAttribute="centerX" secondItem="cbU-33-NfM" secondAttribute="centerX" id="dQC-CN-41f"/>
                             <constraint firstItem="zfI-Ba-dWA" firstAttribute="centerX" secondItem="tad-1A-UgP" secondAttribute="centerX" id="kDx-OB-NAm"/>
                             <constraint firstItem="cbU-33-NfM" firstAttribute="centerX" secondItem="CzA-wc-7KW" secondAttribute="centerX" id="mbc-oC-05s"/>

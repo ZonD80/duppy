@@ -3,11 +3,10 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		88254A34247A66EE001CB040 /* Entitlements.xml in Resources */ = {isa = PBXBuildFile; fileRef = 88254A33247A66EE001CB040 /* Entitlements.xml */; };
 		88D4A5B224793F7700469190 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88D4A5B124793F7700469190 /* AppDelegate.swift */; };
 		88D4A5B624793F7700469190 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88D4A5B524793F7700469190 /* ViewController.swift */; };
 		88D4A5B924793F7700469190 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 88D4A5B724793F7700469190 /* Main.storyboard */; };
@@ -18,13 +17,13 @@
 		88D4A5DE247983E500469190 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 88D4A5DD247983E500469190 /* LICENSE */; };
 		88D4A5E0247985C200469190 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 88D4A5DF247985C200469190 /* icon.png */; };
 		88D4A5E22479952D00469190 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 88D4A5E12479952D00469190 /* .gitignore */; };
-		88D4E685258A98D600000239 /* Kingfisher.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88D4E682258A98D500000239 /* Kingfisher.framework */; };
-		88D4E686258A98D600000239 /* Kingfisher.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 88D4E682258A98D500000239 /* Kingfisher.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		88D4E687258A98D600000239 /* Zip.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88D4E683258A98D600000239 /* Zip.framework */; };
-		88D4E688258A98D600000239 /* Zip.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 88D4E683258A98D600000239 /* Zip.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		88D4E689258A98D600000239 /* Swifter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88D4E684258A98D600000239 /* Swifter.framework */; };
-		88D4E68A258A98D600000239 /* Swifter.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 88D4E684258A98D600000239 /* Swifter.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		88E5FBCA248AAEC6008B8E7A /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88E5FBC9248AAEC6008B8E7A /* WebKit.framework */; };
+		88F4FF6E2E40B0AC0067AA3F /* Zip.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88F4FF6B2E40B0AC0067AA3F /* Zip.xcframework */; };
+		88F4FF6F2E40B0AC0067AA3F /* Zip.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 88F4FF6B2E40B0AC0067AA3F /* Zip.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		88F4FF702E40B0AC0067AA3F /* Swifter.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88F4FF6C2E40B0AC0067AA3F /* Swifter.xcframework */; };
+		88F4FF712E40B0AC0067AA3F /* Swifter.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 88F4FF6C2E40B0AC0067AA3F /* Swifter.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		88F4FF722E40B0AC0067AA3F /* Kingfisher.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88F4FF6D2E40B0AC0067AA3F /* Kingfisher.xcframework */; };
+		88F4FF732E40B0AC0067AA3F /* Kingfisher.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 88F4FF6D2E40B0AC0067AA3F /* Kingfisher.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		88F4FF752E40BC5F0067AA3F /* ldid_iphoneos_arm64 in Resources */ = {isa = PBXBuildFile; fileRef = 88F4FF742E40BC5F0067AA3F /* ldid_iphoneos_arm64 */; };
 		9E8390B4248E0BC900B44FC1 /* AppInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E8390B1248E0BC900B44FC1 /* AppInfoViewController.swift */; };
 		9E8390B6248E0BC900B44FC1 /* MyCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E8390B3248E0BC900B44FC1 /* MyCollectionViewCell.swift */; };
 		9E8390B8248E0BF200B44FC1 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E8390B7248E0BF200B44FC1 /* Extensions.swift */; };
@@ -37,9 +36,9 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				88D4E68A258A98D600000239 /* Swifter.framework in Embed Frameworks */,
-				88D4E688258A98D600000239 /* Zip.framework in Embed Frameworks */,
-				88D4E686258A98D600000239 /* Kingfisher.framework in Embed Frameworks */,
+				88F4FF732E40B0AC0067AA3F /* Kingfisher.xcframework in Embed Frameworks */,
+				88F4FF712E40B0AC0067AA3F /* Swifter.xcframework in Embed Frameworks */,
+				88F4FF6F2E40B0AC0067AA3F /* Zip.xcframework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -47,7 +46,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		88254A33247A66EE001CB040 /* Entitlements.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Entitlements.xml; sourceTree = "<group>"; };
 		888DF239247AAB5D00C73898 /* nstask-bridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "nstask-bridge.h"; sourceTree = "<group>"; };
 		88D4A5AE24793F7700469190 /* Duppy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Duppy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		88D4A5B124793F7700469190 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -62,10 +60,11 @@
 		88D4A5DD247983E500469190 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		88D4A5DF247985C200469190 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
 		88D4A5E12479952D00469190 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
-		88D4E682258A98D500000239 /* Kingfisher.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Kingfisher.framework; path = Carthage/Build/iOS/Kingfisher.framework; sourceTree = "<group>"; };
-		88D4E683258A98D600000239 /* Zip.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Zip.framework; path = Carthage/Build/iOS/Zip.framework; sourceTree = "<group>"; };
-		88D4E684258A98D600000239 /* Swifter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Swifter.framework; path = Carthage/Build/iOS/Swifter.framework; sourceTree = "<group>"; };
-		88E5FBC9248AAEC6008B8E7A /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
+		88F4FF6B2E40B0AC0067AA3F /* Zip.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = Zip.xcframework; path = Carthage/Build/Zip.xcframework; sourceTree = "<group>"; };
+		88F4FF6C2E40B0AC0067AA3F /* Swifter.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = Swifter.xcframework; path = Carthage/Build/Swifter.xcframework; sourceTree = "<group>"; };
+		88F4FF6D2E40B0AC0067AA3F /* Kingfisher.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = Kingfisher.xcframework; path = Carthage/Build/Kingfisher.xcframework; sourceTree = "<group>"; };
+		88F4FF742E40BC5F0067AA3F /* ldid_iphoneos_arm64 */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = ldid_iphoneos_arm64; sourceTree = "<group>"; };
+		88F4FF762E40BC6D0067AA3F /* ldid_iphoneos_arm64 */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; name = ldid_iphoneos_arm64; path = ../../../../Downloads/ldid_iphoneos_arm64; sourceTree = "<group>"; };
 		9E8390B1248E0BC900B44FC1 /* AppInfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppInfoViewController.swift; sourceTree = "<group>"; };
 		9E8390B3248E0BC900B44FC1 /* MyCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyCollectionViewCell.swift; sourceTree = "<group>"; };
 		9E8390B7248E0BF200B44FC1 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
@@ -76,10 +75,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				88D4E685258A98D600000239 /* Kingfisher.framework in Frameworks */,
-				88D4E689258A98D600000239 /* Swifter.framework in Frameworks */,
-				88D4E687258A98D600000239 /* Zip.framework in Frameworks */,
-				88E5FBCA248AAEC6008B8E7A /* WebKit.framework in Frameworks */,
+				88F4FF722E40B0AC0067AA3F /* Kingfisher.xcframework in Frameworks */,
+				88F4FF702E40B0AC0067AA3F /* Swifter.xcframework in Frameworks */,
+				88F4FF6E2E40B0AC0067AA3F /* Zip.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -89,14 +87,13 @@
 		88D4A5A524793F7700469190 = {
 			isa = PBXGroup;
 			children = (
-				88254A33247A66EE001CB040 /* Entitlements.xml */,
 				88D4A5E12479952D00469190 /* .gitignore */,
 				88D4A5DD247983E500469190 /* LICENSE */,
 				88D4A5D52479723800469190 /* README.md */,
 				88D4A5DF247985C200469190 /* icon.png */,
 				88D4A5B024793F7700469190 /* duppy2 */,
+				88F4FF6A2E40B0AC0067AA3F /* Frameworks */,
 				88D4A5AF24793F7700469190 /* Products */,
-				88D4A5C52479409500469190 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -111,6 +108,7 @@
 		88D4A5B024793F7700469190 /* duppy2 */ = {
 			isa = PBXGroup;
 			children = (
+				88F4FF742E40BC5F0067AA3F /* ldid_iphoneos_arm64 */,
 				9E8390B7248E0BF200B44FC1 /* Extensions.swift */,
 				9E8390B1248E0BC900B44FC1 /* AppInfoViewController.swift */,
 				9E8390B3248E0BC900B44FC1 /* MyCollectionViewCell.swift */,
@@ -127,13 +125,13 @@
 			path = duppy2;
 			sourceTree = "<group>";
 		};
-		88D4A5C52479409500469190 /* Frameworks */ = {
+		88F4FF6A2E40B0AC0067AA3F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				88D4E682258A98D500000239 /* Kingfisher.framework */,
-				88D4E684258A98D600000239 /* Swifter.framework */,
-				88D4E683258A98D600000239 /* Zip.framework */,
-				88E5FBC9248AAEC6008B8E7A /* WebKit.framework */,
+				88F4FF762E40BC6D0067AA3F /* ldid_iphoneos_arm64 */,
+				88F4FF6D2E40B0AC0067AA3F /* Kingfisher.xcframework */,
+				88F4FF6C2E40B0AC0067AA3F /* Swifter.xcframework */,
+				88F4FF6B2E40B0AC0067AA3F /* Zip.xcframework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -148,8 +146,8 @@
 				88D4A5AA24793F7700469190 /* Sources */,
 				88D4A5AB24793F7700469190 /* Frameworks */,
 				88D4A5AC24793F7700469190 /* Resources */,
-				888DF23A247AAFB800C73898 /* ShellScript */,
 				88D4E68B258A98D600000239 /* Embed Frameworks */,
+				88F4FF772E40BF320067AA3F /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -199,10 +197,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				88D4A5BE24793F7900469190 /* LaunchScreen.storyboard in Resources */,
-				88254A34247A66EE001CB040 /* Entitlements.xml in Resources */,
 				88D4A5E0247985C200469190 /* icon.png in Resources */,
 				88D4A5BB24793F7900469190 /* Assets.xcassets in Resources */,
 				88D4A5B924793F7700469190 /* Main.storyboard in Resources */,
+				88F4FF752E40BC5F0067AA3F /* ldid_iphoneos_arm64 in Resources */,
 				88D4A5E22479952D00469190 /* .gitignore in Resources */,
 				88D4A5DE247983E500469190 /* LICENSE in Resources */,
 			);
@@ -211,9 +209,9 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		888DF23A247AAFB800C73898 /* ShellScript */ = {
+		88F4FF772E40BF320067AA3F /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 12;
+			buildActionMask = 2147483647;
 			files = (
 			);
 			inputFileListPaths = (
@@ -226,7 +224,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\necho \"setting entitlements to binary=====================================================================================================================\"\nldid -S\"${BUILT_PRODUCTS_DIR}/${WRAPPER_NAME}/Entitlements.xml\" \"${BUILT_PRODUCTS_DIR}/${WRAPPER_NAME}/${EXECUTABLE_NAME}\"\n\n";
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nchmod +x \"$BUILT_PRODUCTS_DIR/$WRAPPER_NAME/ldid_iphoneos_arm64\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -389,18 +387,20 @@
 				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 36YA66W8E9;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
 				INFOPLIST_FILE = duppy2/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				INFOPLIST_KEY_CFBundleDisplayName = Duppy;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2.1;
+				MARKETING_VERSION = 1.3.0;
 				PRODUCT_BUNDLE_IDENTIFIER = zond80.duppy2;
 				PRODUCT_NAME = Duppy;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -419,18 +419,20 @@
 				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 36YA66W8E9;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
 				INFOPLIST_FILE = duppy2/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				INFOPLIST_KEY_CFBundleDisplayName = Duppy;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2.1;
+				MARKETING_VERSION = 1.3.0;
 				PRODUCT_BUNDLE_IDENTIFIER = zond80.duppy2;
 				PRODUCT_NAME = Duppy;
 				PROVISIONING_PROFILE_SPECIFIER = "";
