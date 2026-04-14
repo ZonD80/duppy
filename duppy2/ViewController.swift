@@ -398,8 +398,11 @@ class ViewController: UIViewController , UICollectionViewDelegate, UICollectionV
                             var trackId:String = "";
                             
                             do {
-                                iTunesMetadataPlistEntities = try PropertyListSerialization.propertyList(from: Data(contentsOf: iTunesMetadataPlistURL), options: [], format: nil) as! NSDictionary
-                                trackId = String(describing: iTunesMetadataPlistEntities["itemId"] ?? "") // wtf. it is stupid af
+                                let plistAny = try PropertyListSerialization.propertyList(from: Data(contentsOf: iTunesMetadataPlistURL), options: [], format: nil)
+                                if let dict = plistAny as? NSDictionary {
+                                    iTunesMetadataPlistEntities = dict
+                                    trackId = String(describing: iTunesMetadataPlistEntities["itemId"] ?? "") // wtf. it is stupid af
+                                }
                             } catch {
                                 self.log("App is not from appstore. okay");
                             }
@@ -413,28 +416,33 @@ class ViewController: UIViewController , UICollectionViewDelegate, UICollectionV
                             var mainBundleVersion:String = ""
                             
                             do {
-                                let mainInfoPlistEntities = try PropertyListSerialization.propertyList(from: Data(contentsOf: mainInfoPlistURL), options: [], format: nil) as! NSDictionary
+                                let plistAny = try PropertyListSerialization.propertyList(from: Data(contentsOf: mainInfoPlistURL), options: [], format: nil)
+                                guard let mainInfoPlistEntities = plistAny as? NSDictionary else {
+                                    self.log("Info.plist is not a dictionary for \(finalAppDir)")
+                                    return
+                                }
                                 
-                                self.log("display name is :\(mainInfoPlistEntities["CFBundleDisplayName"])");
+                                self.log("display name is :\(String(describing: mainInfoPlistEntities["CFBundleDisplayName"]))");
                                 
-                                mainBundleId = mainInfoPlistEntities["CFBundleIdentifier"] as! String
-                                if (mainBundleId.hasPrefix("com.apple.")) {
+                                if let bid = mainInfoPlistEntities["CFBundleIdentifier"] as? String {
+                                    mainBundleId = bid
+                                }
+                                if mainBundleId.hasPrefix("com.apple.") {
                                     // it's apple software
                                     return;
                                 }
-                                if mainInfoPlistEntities["CFBundleDisplayName"] != nil {
-                                    mainBundleName = mainInfoPlistEntities["CFBundleDisplayName"] as! String
+                                if let displayName = mainInfoPlistEntities["CFBundleDisplayName"] as? String {
+                                    mainBundleName = displayName
+                                } else if let bundleName = mainInfoPlistEntities["CFBundleName"] as? String {
+                                    mainBundleName = bundleName
                                 }
-                                else {
-                                    mainBundleName = mainInfoPlistEntities["CFBundleName"] as! String
-                                }
-                                if mainInfoPlistEntities["CFBundleExecutable"] != nil {
-                                    mainBundleExecutable = mainInfoPlistEntities["CFBundleExecutable"] as! String
+                                if let executable = mainInfoPlistEntities["CFBundleExecutable"] as? String {
+                                    mainBundleExecutable = executable
                                 }
                                 // Improved icon detection with directory scanning
                                 mainBundleIcon = findAppIcon(appPath: finalAppDir, plistEntities: mainInfoPlistEntities)
-                                if mainInfoPlistEntities["CFBundleShortVersionString"] != nil {
-                                    mainBundleVersion = mainInfoPlistEntities["CFBundleShortVersionString"] as! String
+                                if let version = mainInfoPlistEntities["CFBundleShortVersionString"] as? String {
+                                    mainBundleVersion = version
                                 }
                             } catch {
                                 self.log("Unable to get app name")
